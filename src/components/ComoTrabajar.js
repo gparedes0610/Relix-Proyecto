@@ -24,7 +24,7 @@ function ComoTrabajar() {
       </small>
       <br />
       <small className="fw-bolder">
-        .Cualquier cambio siempre hacer click en "Guardar"
+        .Cualquier cambio en la tabla siempre hacer click en "Guardar"
       </small>
     </div>
   );

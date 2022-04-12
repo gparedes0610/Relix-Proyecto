@@ -56,6 +56,7 @@ function SesionIniciada() {
   }, []);
 
   const [ActivarFicha, setActivarFicha] = useState(false);
+  const [taparCalculos, setTaparCalculos] = useState(false);
   if (!usuario) {
     return null;
   }
@@ -85,6 +86,8 @@ function SesionIniciada() {
                       <FichaTecnica
                         setActivarFicha={setActivarFicha}
                         ActivarFicha={ActivarFicha}
+                        setTaparCalculos={setTaparCalculos}
+                        taparCalculos={taparCalculos}
                       />
                     ) : (
                       <Tabla />
@@ -101,6 +104,8 @@ function SesionIniciada() {
                       <BtnCrearFicha
                         setActivarFicha={setActivarFicha}
                         ActivarFicha={ActivarFicha}
+                        setTaparCalculos={setTaparCalculos}
+                        taparCalculos={taparCalculos}
                       />
                     </div>
                   </div>
@@ -110,6 +115,8 @@ function SesionIniciada() {
                       <ListaFichas
                         setActivarFicha={setActivarFicha}
                         ActivarFicha={ActivarFicha}
+                        setTaparCalculos={setTaparCalculos}
+                        taparCalculos={taparCalculos}
                       />
                     </div>
                   </div>

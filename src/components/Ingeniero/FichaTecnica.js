@@ -17,7 +17,12 @@ import authContext from "../../context/autenticacion/authContext";
 import alertContext from "../../context/alertas/alertaContext";
 import fichaTecnicaContext from "../../context/fichaTecnica/fichaTecnicaContext";
 
-function FichaTecnica({ setActivarFicha, ActivarFicha }) {
+function FichaTecnica({
+  setActivarFicha,
+  ActivarFicha,
+  taparCalculos,
+  setTaparCalculos,
+}) {
   //context
   const alertascontext = useContext(alertContext);
   const { alerta, mostrarAlerta } = alertascontext;
@@ -1653,70 +1658,72 @@ function FichaTecnica({ setActivarFicha, ActivarFicha }) {
                       </Form.Group>
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-12  col-md-4">
-                      <Form.Group
-                        controlId="formBasicText"
-                        style={{ background: "white" }}
-                      >
-                        <Form.Label style={{ background: "white" }}>
-                          Utilidad USD:
-                        </Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Utilidad USD"
-                          name="utilidadFichatecnica"
-                          value={utilidadFichatecnica}
-                          onChange={(e) => {
-                            actualizarInput(e);
-                          }}
-                          required
-                        />
-                      </Form.Group>
-                    </div>
+                  {taparCalculos ? (
+                    <div className="row">
+                      <div className="col-12  col-md-4">
+                        <Form.Group
+                          controlId="formBasicText"
+                          style={{ background: "white" }}
+                        >
+                          <Form.Label style={{ background: "white" }}>
+                            Utilidad USD:
+                          </Form.Label>
+                          <Form.Control
+                            type="text"
+                            placeholder="Utilidad USD"
+                            name="utilidadFichatecnica"
+                            value={utilidadFichatecnica}
+                            onChange={(e) => {
+                              actualizarInput(e);
+                            }}
+                            disabled
+                          />
+                        </Form.Group>
+                      </div>
 
-                    <div className="col-12  col-md-4">
-                      <Form.Group
-                        controlId="formBasicText"
-                        style={{ background: "white" }}
-                      >
-                        <Form.Label style={{ background: "white" }}>
-                          Valor venta sin IGV USD:
-                        </Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Valor venta sin IGV USD"
-                          name="valorventaFichatecnica"
-                          value={valorventaFichatecnica}
-                          onChange={(e) => {
-                            actualizarInput(e);
-                          }}
-                          required
-                        />
-                      </Form.Group>
-                    </div>
+                      <div className="col-12  col-md-4">
+                        <Form.Group
+                          controlId="formBasicText"
+                          style={{ background: "white" }}
+                        >
+                          <Form.Label style={{ background: "white" }}>
+                            Valor venta sin IGV USD:
+                          </Form.Label>
+                          <Form.Control
+                            type="text"
+                            placeholder="Valor venta sin IGV USD"
+                            name="valorventaFichatecnica"
+                            value={valorventaFichatecnica}
+                            onChange={(e) => {
+                              actualizarInput(e);
+                            }}
+                            disabled
+                          />
+                        </Form.Group>
+                      </div>
 
-                    <div className="col-12  col-md-4">
-                      <Form.Group
-                        controlId="formBasicText"
-                        style={{ background: "white" }}
-                      >
-                        <Form.Label style={{ background: "white" }}>
-                          Valor Venta con IGV:
-                        </Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Valor Venta con IGV"
-                          name="valorventaigvFichatecnica"
-                          value={valorventaigvFichatecnica}
-                          onChange={(e) => {
-                            actualizarInput(e);
-                          }}
-                          required
-                        />
-                      </Form.Group>
+                      <div className="col-12  col-md-4">
+                        <Form.Group
+                          controlId="formBasicText"
+                          style={{ background: "white" }}
+                        >
+                          <Form.Label style={{ background: "white" }}>
+                            Valor Venta con IGV:
+                          </Form.Label>
+                          <Form.Control
+                            type="text"
+                            placeholder="Valor Venta con IGV"
+                            name="valorventaigvFichatecnica"
+                            value={valorventaigvFichatecnica}
+                            onChange={(e) => {
+                              actualizarInput(e);
+                            }}
+                            disabled
+                          />
+                        </Form.Group>
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
                   <div className="row">
                     <div className="col-12 col-md-6">
                       <Form.Group

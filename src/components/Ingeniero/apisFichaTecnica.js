@@ -8,7 +8,7 @@ const URLESTADOS = `http://relixapi.mskdevmusic.com/estadosfichaproyecto`;
 
 const obtenerTiposDeProyectos = async () => {
   try {
-    const { data } = await axios.get(URLTIPOSPROYECTOS);
+    const { data } = await clienteAxios.get("/tiposproyecto");
     return data;
   } catch (error) {
     console.log(error);
@@ -17,7 +17,7 @@ const obtenerTiposDeProyectos = async () => {
 
 const obtenerVendedores = async () => {
   try {
-    const { data } = await axios.get(URLVENDEDORES);
+    const { data } = await clienteAxios.get("/vendedor");
     return data;
   } catch (error) {
     console.log(error);
@@ -26,7 +26,7 @@ const obtenerVendedores = async () => {
 
 const obtenerDepartamentos = async () => {
   try {
-    const { data } = await axios.get(URLDEPARTAMENTOS);
+    const { data } = await clienteAxios.get("/departamento");
     return data;
   } catch (error) {
     console.log(error);
@@ -34,9 +34,7 @@ const obtenerDepartamentos = async () => {
 };
 const obtenerProvincias = async (idDepartamento = "") => {
   try {
-    const { data } = await axios.get(
-      `http://relixapi.mskdevmusic.com/provincia/${idDepartamento}`
-    );
+    const { data } = await clienteAxios.get(`/provincia/${idDepartamento}`);
     return data;
   } catch (error) {
     console.log("error en obtenerProvincias", error);
@@ -44,9 +42,7 @@ const obtenerProvincias = async (idDepartamento = "") => {
 };
 const obtenerDistritos = async (idProvincia = "") => {
   try {
-    const { data } = await axios.get(
-      `http://relixapi.mskdevmusic.com/distrito/${idProvincia}`
-    );
+    const { data } = await clienteAxios.get(`/distrito/${idProvincia}`);
     return data;
   } catch (error) {
     console.log("error en obtenerProvincias", error);
@@ -55,7 +51,7 @@ const obtenerDistritos = async (idProvincia = "") => {
 
 const obtenerEstados = async () => {
   try {
-    const { data } = await axios.get(URLESTADOS);
+    const { data } = await clienteAxios.get("/estadosfichaproyecto");
     return data;
   } catch (error) {
     console.log(error);
@@ -64,9 +60,7 @@ const obtenerEstados = async () => {
 
 const obtenerCodigoFichaTenica = async () => {
   try {
-    const { data } = await clienteAxios.get(
-      `http://relixapi.mskdevmusic.com/api/codigoficha `
-    );
+    const { data } = await clienteAxios.get(`/api/codigoficha `);
     return data;
   } catch (error) {
     console.log(error);
@@ -75,9 +69,7 @@ const obtenerCodigoFichaTenica = async () => {
 
 const obtenerFormasDePago = async () => {
   try {
-    const { data } = await clienteAxios.get(
-      `http://relixapi.mskdevmusic.com/formaspago`
-    );
+    const { data } = await clienteAxios.get(`/formaspago`);
     return data;
   } catch (error) {
     console.log(error);

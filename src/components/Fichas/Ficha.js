@@ -9,6 +9,8 @@ function Ficha({
   cambiarColor,
   setCambiarColor,
   i,
+  taparCalculos,
+  setTaparCalculos,
 }) {
   const [existeTabla, setExisteTabla] = useState(false);
   //const [cambiarColor, setCambiarColor] = useState(false);
@@ -64,6 +66,7 @@ function Ficha({
     console.log("hiciste click en editar");
     guardarFichaActual(fichatecnica);
     clasesPrueba(i);
+    setTaparCalculos(true);
   };
   return (
     <li

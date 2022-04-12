@@ -2,7 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import fichaTecnicaContext from "../../context/fichaTecnica/fichaTecnicaContext";
 import Ficha from "./Ficha";
 
-function ListaFichas({ setActivarFicha, ActivarFicha }) {
+function ListaFichas({
+  setActivarFicha,
+  ActivarFicha,
+  taparCalculos,
+  setTaparCalculos,
+}) {
   ///////////////////////////////
   const fichatecnicacontext = useContext(fichaTecnicaContext);
   const { todasLasFichasTecnica } = fichatecnicacontext;
@@ -20,6 +25,8 @@ function ListaFichas({ setActivarFicha, ActivarFicha }) {
             cambiarColor={cambiarColor}
             setCambiarColor={setCambiarColor}
             i={i}
+            setTaparCalculos={setTaparCalculos}
+            taparCalculos={taparCalculos}
           />
         ))
       ) : (
