@@ -57,19 +57,29 @@ function Reporte() {
     },
     {
       headerName: "UND",
-      field: "und, ",
+      field: "undProducto",
     },
     {
       headerName: "Cantidad",
-      field: "cantidadDetallefichatecnica, ",
+      field: "cantidadDetallefichatecnica",
     },
     {
       headerName: "P.UNIT",
-      field: "preciounitarioDetallefichatecnica ",
+      field: "preciounitarioDetallefichatecnica",
+      cellRendererFramework: (params) => (
+        <>
+          <span>$ {params.data.preciounitarioDetallefichatecnica}</span>
+        </>
+      ),
     },
     {
       headerName: "SubTotal",
-      field: "preciototalDetallefichatecnica ",
+      field: "preciodescuentoDetallefichatecnica",
+      cellRendererFramework: (params) => (
+        <>
+          <span>$ {params.data.preciodescuentoDetallefichatecnica}</span>
+        </>
+      ),
     },
   ];
 
@@ -100,75 +110,40 @@ function Reporte() {
     });
     // console.log("soy checked", listaChecks);
   };
+
+  const [botonActivo, setBotonActivo] = useState(true);
   const manejarSubmit = (e) => {
     e.preventDefault();
     console.log("entraste a manejarSubmit");
     console.log("soy checked", listaChecks);
     const listaChecksConId = { ...listaChecks, id };
+    const { partida, subPartida, precioUnitario, subTotal } = listaChecksConId;
     console.log("listaChecksConId", listaChecksConId);
-    const prueba = JSON.stringify(listaChecksConId);
-    console.log(prueba);
-    excelReporteDos(prueba);
+    //const prueba = JSON.stringify(listaChecksConId);
+    //console.log(prueba);
+    /*   console.log(
+      `hola ${id}&${partida}&${subPartida}&${precioUnitario}&${subTotal}`
+    ); */
+    excelReporteDos(
+      `${id}&${partida}&${subPartida}&${precioUnitario}&${subTotal}`
+    );
+    setBotonActivo(false);
+    setTimeout(() => {
+      setBotonActivo(true);
+    }, 4200);
   };
   return (
     <>
       {/* <NavBar /> */}
       <div className="container-fluid">
-        <h2 className="text-uppercase text-primary">
+        <h2 className="text-uppercase text-primary fw-bold bg-light py-4">
           Reporte Presupuesto-cotizacion
         </h2>
         <ul>
-          <li>.Click derecha en la tabla y seleccionar su tipo de descarga.</li>
-          <li>
-            .Click en "Descargar Excel completo" para descargar el excel con el
-            formato acordado.
-          </li>
+          <li>.Con las casillas seleccionadas se descargara el reporte.</li>
         </ul>
-        <div
-          id="myGrid"
-          className="ag-theme-alpine"
-          style={{ height: 400, width: "100%" }}
-        >
-          <AgGridReact
-            rowData={tablaDatosGerenteGeneral}
-            columnDefs={columns}
-            defaultColDef={defaultColDef}
-            rowSelection={rowSelectionType} //selecciona una fila
-            onSelectionChanged={onSelectionChanged}
-            // autoGroupColumnDef={autoGroupColumnDef}
-            //  suppressRowClickSelection={true}
-            //rowSelection={"multiple"}
-            //onGridReady={onGridReady}
-
-            // onSelectionChanged={onSelectionChanged} //selecciona varias filas con control
-            //rowMultiSelectWithClick={true}
-          />
-        </div>
         <div className="row">
-          <div className="col-12 col-md-6">
-            <NavLink to={"/sesioniniciada"} className="mt-3 btn btn-primary">
-              Regresar
-            </NavLink>
-          </div>
-          <div className="col-12 col-md-6  d-flex justify-content-end">
-            {/* <a
-              href={`http://relixapi.mskdevmusic.com/ExcelReporteDos/${id}`}
-              target="_blank"
-              className="btn btn-warning mt-3 text-end"
-            >
-              Descargar Excel completo
-            </a> */}
-            <button
-              onClick={() => {
-                descargarExcelReporteDos();
-              }}
-            >
-              Descarga
-            </button>
-          </div>
-        </div>
-        <div className="row">
-          <p>Con las casillas seleccionadas saldra el reporte.</p>
+          <p className="text-uppercase">Selecciona sus casillas</p>
           <form onSubmit={(e) => manejarSubmit(e)}>
             <label>
               <input
@@ -207,11 +182,47 @@ function Reporte() {
                 checked={subTotal}
                 onChange={handleChange}
               />
-              P.Unitario
+              subTotal
             </label>
             <br />
-            <button type="submit">Descargando</button>
+            <button
+              type="submit"
+              className=" btn btn-success my-3"
+              disabled={!botonActivo}
+            >
+              Descargando
+            </button>
           </form>
+        </div>
+        <div
+          id="myGrid"
+          className="ag-theme-alpine"
+          style={{ height: 400, width: "100%" }}
+        >
+          <AgGridReact
+            rowData={tablaDatosGerenteGeneral}
+            columnDefs={columns}
+            defaultColDef={defaultColDef}
+            rowSelection={rowSelectionType} //selecciona una fila
+            onSelectionChanged={onSelectionChanged}
+            // autoGroupColumnDef={autoGroupColumnDef}
+            //  suppressRowClickSelection={true}
+            //rowSelection={"multiple"}
+            //onGridReady={onGridReady}
+
+            // onSelectionChanged={onSelectionChanged} //selecciona varias filas con control
+            //rowMultiSelectWithClick={true}
+          />
+        </div>
+        <div className="row">
+          <div className="col-12 col-md-6">
+            <NavLink
+              to={"/sesioniniciada"}
+              className="mt-3 btn btn-primary w-50"
+            >
+              {"<"} Regresar
+            </NavLink>
+          </div>
         </div>
       </div>
     </>

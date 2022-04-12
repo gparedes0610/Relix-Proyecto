@@ -164,7 +164,7 @@ function SesionGerenteAdministracion() {
     // guardarCotizacion(fichaTecnica[0].idFichatecnica); //mando ID DE LA FICHA TECNICA
     setTimeout(() => {
       setBotonActivo(true);
-    }, 6500);
+    }, 7000);
   };
   const denegarAlta = () => {
     console.log("hiciste click en denegarAlta");

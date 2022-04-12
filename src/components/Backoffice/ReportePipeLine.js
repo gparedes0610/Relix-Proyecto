@@ -7,7 +7,7 @@ import fichaTecnicaContext from "../../context/fichaTecnica/fichaTecnicaContext"
 function ReportePipeLine({ setMostrarReportePipeLine }) {
   ///////////////////////////////
   const fichatecnicacontext = useContext(fichaTecnicaContext);
-  const { todasLasFichasTecnica } = fichatecnicacontext;
+  const { todasLasFichasTecnica, reportePepiline } = fichatecnicacontext;
   //////////////////////////////
   const columns = [
     {
@@ -18,27 +18,27 @@ function ReportePipeLine({ setMostrarReportePipeLine }) {
       headerName: "Fecha Inicio Probable",
       field: "fechaFichatecnica",
     },
-    {
+    /*  {
       headerName: "Duracion Meses",
       field: "",
-    },
+    }, */
     {
       headerName: "Cultivo",
       field: "cultivoFichatecnica",
     },
-    {
+    /* {
       headerName: "ha",
       field: "",
-    },
-    {
+    }, */
+    /* {
       headerName: "Probabilidad %",
       field: "",
-    },
+    }, */
     {
       headerName: "Status",
       field: "estadoFichaproyecto",
     },
-    {
+    /* {
       headerName: "Preparacion",
       field: "",
     },
@@ -69,7 +69,7 @@ function ReportePipeLine({ setMostrarReportePipeLine }) {
     {
       headerName: "Riego",
       field: "",
-    },
+    }, */
   ];
   const defaultColDef = {
     /* filter: true, */
@@ -82,12 +82,24 @@ function ReportePipeLine({ setMostrarReportePipeLine }) {
   const onSelectionChanged = (event) => {
     console.log(event.api.getSelectedRows());
   };
+
+  const descargarReportePepiline = () => {
+    console.log("entraste a descargarReportePepiline");
+    reportePepiline();
+  };
   return (
     <div className="container-fluid">
       <h2 className="text-primary text-uppercase">Reporte Pipeline</h2>
       <ul>
         <li>.Click derecho y seleccione la opcion para descargar.</li>
       </ul>
+      <button
+        className="btn btn-primary w-25 mb-3"
+        onClick={() => descargarReportePepiline()}
+      >
+        Descargar Excel
+      </button>
+
       <div
         id="myGrid"
         className="ag-theme-alpine"

@@ -14,6 +14,7 @@ import {
   ALTA_NEGOCIO,
   ALTA_NEGOCIO_GERENTE_ADMINISTRACION,
   OBTENER_DATOS_TABLA_REPORTE,
+  ELIMINAR_TABLA,
 } from "../../types";
 import clienteAxios from "../../config/axios";
 
@@ -152,6 +153,24 @@ const TablaStateProvider = (props) => {
       console.log(error);
     }
   };
+  const eliminarDatosTabla = async (id) => {
+    //tarea.id = uuidv4();
+    console.log("estas en eliminarDatosTabla y has enviado este id", id);
+    try {
+      const resultado = await clienteAxios.delete(`/detallefichatecnica/${id}`);
+      console.log("resultado de agregarDatosTabla", resultado);
+      console.log(
+        "resultado de agregarDatosTabla,ESTO ES LO Q ME DEVUELVE",
+        resultado.data
+      );
+      dispatch({
+        type: ELIMINAR_TABLA,
+        payload: resultado.data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   /**
    *
@@ -197,6 +216,7 @@ const TablaStateProvider = (props) => {
         altaNegocio,
         altaNegocioGerenteAdministracion,
         obtenerDatosTablaReporte,
+        eliminarDatosTabla,
       }}
     >
       {props.children}

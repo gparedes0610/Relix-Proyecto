@@ -8,6 +8,7 @@ import {
   ALTA_NEGOCIO,
   ALTA_NEGOCIO_GERENTE_ADMINISTRACION,
   OBTENER_DATOS_TABLA_REPORTE,
+  ELIMINAR_TABLA,
 } from "../../types";
 
 const tableReducer = (state, action) => {
@@ -53,6 +54,11 @@ const tableReducer = (state, action) => {
       return {
         ...state,
         tablaDatos: action.payload,
+      };
+    case ELIMINAR_TABLA:
+      return {
+        ...state,
+        tablaDatos: [],
       };
     /* case ACTUALIZAR_DATOS_TABLA:
       const { rowUpdated, keyId } = action.payload;

@@ -18,7 +18,8 @@ function SesionBackOffice() {
   ////////////////////////
   ///////////////////////////////
   const fichatecnicacontext = useContext(fichaTecnicaContext);
-  const { fichaTecnica, obtenerTodasLasFichasTecnicas } = fichatecnicacontext;
+  const { fichaTecnica, obtenerTodasLasFichasTecnicas, reportePepiline } =
+    fichatecnicacontext;
   //////////////////////////////
   const [mostrartabla, setMostrartabla] = useState(false);
   const [botonActivo, setBotonActivo] = useState(true);
@@ -166,9 +167,17 @@ function SesionBackOffice() {
     console.log(event.api.getSelectedRows());
   };
   //seleccion de una fila se le pone  rowSelection={rowSelectionType} y luego la variable const rowSelectionType = "single"
-  const mostrarReportePipeline = () => {
+  /*  const mostrarReportePipeline = () => {
     setMostrarReportePipeLine(true);
     setMostrartabla(false);
+  }; */
+  const descargarReportePepiline = () => {
+    console.log("entraste a descargarReportePepiline");
+    reportePepiline();
+    setBotonActivo(false);
+    setTimeout(() => {
+      setBotonActivo(true);
+    }, 3500);
   };
   return (
     <div className="container-fluid">
@@ -234,7 +243,9 @@ function SesionBackOffice() {
           <p className="h3 text-uppercase">Lista de Fichas </p>
           <button
             className="w-100 btn btn-warning text-uppercase mb-3 fw-bolder"
-            onClick={() => mostrarReportePipeline()}
+            //onClick={() => mostrarReportePipeline()}
+            onClick={() => descargarReportePepiline()}
+            disabled={!botonActivo}
           >
             Reporte Pipeline
           </button>

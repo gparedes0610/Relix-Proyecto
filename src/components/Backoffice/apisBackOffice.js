@@ -1,4 +1,3 @@
-import axios, { Axios } from "axios";
 import clienteAxios from "../../config/axios";
 
 const obtenerFichasBackOffice = async () => {

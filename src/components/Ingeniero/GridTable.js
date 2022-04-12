@@ -22,8 +22,12 @@ function Tabla() {
   /////////////////////////////
   const [discount, setDiscount] = useState("");
   const tablacontext = useContext(tablaContext);
-  const { tablaDatos, agregarDatosTabla, guardarCotizacionEnLaBd } =
-    tablacontext;
+  const {
+    tablaDatos,
+    agregarDatosTabla,
+    guardarCotizacionEnLaBd,
+    eliminarDatosTabla,
+  } = tablacontext;
   //////////////////////////
   ///////////////////////////////
   const fichatecnicacontext = useContext(fichaTecnicaContext);
@@ -67,13 +71,14 @@ function Tabla() {
       filter: true,
     },
     {
-      headerName: "Codido Proveedor",
-      field: "codigoproveedorDetallefichatecnica",
-    },
-    {
       headerName: "Codigo ERP",
       field: "codigosoftcomProducto",
     },
+    {
+      headerName: "Codido Proveedor",
+      field: "codigoproveedorDetallefichatecnica",
+    },
+
     {
       headerName: "Descripcion",
       field: "descripcionDetallefichatecnica",
@@ -287,7 +292,7 @@ function Tabla() {
         ...item,
         idFichatecnica: fichaTecnica[0].idFichatecnica,
       }));
-      agregarDatosTabla(agregarId);
+      agregarDatosTabla(agregarId); // ESTO ES LO Q SE ENVIA PRIMERO AL BACKEND Y SE REGRESA EN tablaDatos
     });
   };
   /* para importar un excel y convertilo en un array de objetos */
@@ -301,6 +306,7 @@ function Tabla() {
           precioventadosProducto,
           precioventatresProducto,
           precioventacuatroProducto,
+          //precioventacincoProducto,
         } = newRowData;
         const options = {
           optionSelected: precioventaunoProducto,
@@ -308,6 +314,7 @@ function Tabla() {
           precioventadosProducto,
           precioventatresProducto,
           precioventacuatroProducto,
+          //precioventacincoProducto,
         };
         const isManual = Object.keys(options).every(
           (key) => options[key] === 0
@@ -413,24 +420,23 @@ function Tabla() {
         setBotonActivo(true);
       }, 4200);
     }
-    //guardarCotizacion(fichaTecnica[0].idFichatecnica);
-    /*   console.log(
-      "hiciste click en EnviarguardadoCotizacion , ESTE ES EL ID",
-      fichaTecnica[0].idFichatecnica,
-      ", y esta es la ficha tecnica",
-      fichaTecnica
-    ); */
   };
 
   const cotizacionGuardadaEnLaBd = () => {
     console.log("se guardo", dataUpdated);
     console.log("este es el id de esta ficha", fichaTecnica[0].idFichatecnica);
+
     const tablaConIdDeFichaTecnica = dataUpdated.map((item) => ({
       ...item,
       idFichatecnica: fichaTecnica[0].idFichatecnica,
     }));
     console.log("toda la tabla", tablaConIdDeFichaTecnica);
     guardarCotizacionEnLaBd(tablaConIdDeFichaTecnica);
+  };
+
+  const eliminarTabla = () => {
+    console.log("tabla eliminada id ", fichaTecnica[0].idFichatecnica);
+    eliminarDatosTabla(fichaTecnica[0].idFichatecnica);
   };
 
   const cambiarEstado = () => {
@@ -506,7 +512,13 @@ function Tabla() {
             </p>
           ) : (
             <>
-              <button className=" btn btn-warning ms-3" disabled={!botonActivo}>
+              <button
+                className=" btn btn-warning ms-3"
+                disabled={!botonActivo}
+                onClick={() => {
+                  eliminarTabla();
+                }}
+              >
                 Limpiar Tabla
               </button>
               <button

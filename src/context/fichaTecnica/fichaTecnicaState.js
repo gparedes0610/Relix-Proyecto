@@ -14,6 +14,7 @@ import {
   EXCEL_REPORTE_DOS,
 } from "../../types";
 import clienteAxios from "../../config/axios";
+
 const FichaTecnicaStateProvider = (props) => {
   const initialState = {
     todasLasFichasTecnica: [],
@@ -112,22 +113,51 @@ const FichaTecnicaStateProvider = (props) => {
   const excelReporteDos = async (id) => {
     console.log("esto es lo enviado", id);
     try {
-      /* const respuesta = await clienteAxios.get(`/ExcelReporteDos/${id}`);
-      console.log("respuesta de excelReporteDos", respuesta.data);
-      dispatch({
-        type: EXCEL_REPORTE_DOS,
-        payload: respuesta.data,
-      }); */
       const resultado = await clienteAxios.get(`/ExcelReporteDos/${id}`);
-      console.log("respuesta de excelReporteDos", resultado.data);
+      //console.log("respuesta de excelReporteDos", resultado.data);
 
-      //const nombreDescargaArchivo = "Reporte Cotización";
+      const nombreDescargaArchivo = "Reporte Cotización";
 
-      /* const link = document.createElement("a");
+      const link = document.createElement("a");
       link.href = `http://relixapi.mskdevmusic.com/ExcelReporteDos/${id}`;
       link.setAttribute("download", nombreDescargaArchivo);
       document.body.appendChild(link);
-      link.click(); */
+      link.click();
+    } catch (error) {
+      console.log(error.response.data.messages.error);
+    }
+  };
+
+  const reportePepiline = async () => {
+    console.log("entraste a reportePepiline");
+    const fecha = new Date();
+    const hoy = fecha.getDate();
+    const mesActual = fecha.getMonth() + 1;
+    const anoActual = fecha.getFullYear();
+    try {
+      var config = {
+        responseType: "arraybuffer",
+      };
+      const resultado = await clienteAxios.get(
+        `/api/exportarFichasTecnicas`,
+        config
+      );
+      console.log("respuesta de excelReporteDos", resultado.data);
+
+      const url = URL.createObjectURL(
+        new Blob([resultado.data], {
+          type: "application/vnd.ms-excel",
+        })
+      );
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `reportePipeLine ${hoy}_${mesActual}_${anoActual}.xlsx`
+      );
+      document.body.appendChild(link);
+      link.click();
     } catch (error) {
       console.log(error.response.data.messages.error);
     }
@@ -147,6 +177,7 @@ const FichaTecnicaStateProvider = (props) => {
         actualizarFicha,
         guardarCotizacion,
         excelReporteDos,
+        reportePepiline,
       }}
     >
       {props.children}
