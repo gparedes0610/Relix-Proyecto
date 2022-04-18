@@ -3,7 +3,6 @@ import { NavLink, useParams } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import NavBar from "../../views/NavBar";
 import tablaContext from "../../context/tabla/tablaContext";
 import fichaTecnicaContext from "../../context/fichaTecnica/fichaTecnicaContext";
 
@@ -19,16 +18,16 @@ function Reporte() {
   //////////////////////////////
 
   const { id } = useParams();
-  //console.log(id);
+  console.log(id);
 
   useEffect(() => {
     obtenerDatosTablaReporte(id);
   }, []);
 
-  const descargarExcelReporteDos = () => {
+  /* const descargarExcelReporteDos = () => {
     console.log("entraste a descargarExcelReporteDos");
     excelReporteDos(id);
-  };
+  }; */
 
   const columns = [
     {

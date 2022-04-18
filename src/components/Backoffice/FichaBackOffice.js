@@ -43,9 +43,6 @@ function FichaBackOffice({
     setMostrarReportePipeLine(false);
     // fichaTecnicaActual(fichaAceptada.idFichatecnica);
   };
-  const prueba = () => {
-    console.log("diste click");
-  };
   return (
     <li
       className={
@@ -69,7 +66,6 @@ function FichaBackOffice({
         <NavLink
           to={`/reporte/${fichaAceptada.idFichatecnica}`}
           className="btn btn-primary my-auto"
-          onClick={() => prueba()}
         >
           Reportes
         </NavLink>

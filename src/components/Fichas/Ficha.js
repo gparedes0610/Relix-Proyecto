@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 
 import fichaTecnicaContext from "../../context/fichaTecnica/fichaTecnicaContext";
 import tablaContext from "../../context/tabla/tablaContext";
+
 function Ficha({
   fichatecnica,
   setActivarFicha,
@@ -76,27 +78,36 @@ function Ficha({
           : "list-group-item d-flex justify-content-between cambiarcolores  "
       }
     >
-      <div>
-        <p className="fw-bolder  text-uppercase my-0 py-0 mb-2">
-          {fichatecnica.nombreFichatecnica} - {fichatecnica.numFichatecnica}
-        </p>
-        <p
-          className="my-0 py-0  fw-bold text-center text-uppercase estado"
-          style={{ border: "2px solid #F18721", borderRadius: "25px" }}
-        >
-          {fichatecnica.estadoFichaproyecto}
-        </p>
-      </div>
-      <div className="d-flex ">
-        <button
-          className="btn btn-success mx-2 py-0"
-          onClick={() => verTabla(fichatecnica.idFichatecnica)}
-        >
-          Ver Lista de Materiales
-        </button>{" "}
-        <button className="btn btn-warning py-0" onClick={() => btnEditar()}>
-          Editar Ficha
-        </button>
+      <div className="d-flex flex-column align-items-center w-100">
+        <div>
+          <p className="fw-bolder  text-uppercase my-0 py-0 mb-2">
+            {fichatecnica.nombreFichatecnica} - {fichatecnica.numFichatecnica}
+          </p>
+          <p
+            className="my-0 py-0  fw-bold text-center text-uppercase estado"
+            style={{ border: "2px solid #F18721", borderRadius: "25px" }}
+          >
+            {fichatecnica.estadoFichaproyecto}
+          </p>
+        </div>
+
+        <div className="d-flex my-2">
+          <button
+            className="btn btn-success px-2 py-0"
+            onClick={() => verTabla(fichatecnica.idFichatecnica)}
+          >
+            Ver Lista de Materiales
+          </button>
+          <NavLink
+            to={`/reporte/${fichatecnica.idFichatecnica}`}
+            className="btn btn-primary mx-2"
+          >
+            Reportes
+          </NavLink>
+          <button className="btn btn-warning py-0" onClick={() => btnEditar()}>
+            Editar Ficha
+          </button>
+        </div>
       </div>
     </li>
   );

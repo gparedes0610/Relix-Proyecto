@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import tablaContext from "../../context/tabla/tablaContext";
 import fichaTecnicaContext from "../../context/fichaTecnica/fichaTecnicaContext";
 import { obtenerFichasAceptadas } from "./apisGerenteGeneral";
+import { NavLink } from "react-router-dom";
 
 function FichaAceptadaIngeniero({
   fichaAceptada,
@@ -67,6 +68,12 @@ function FichaAceptadaIngeniero({
         </p>
       </div>
       <div className="d-flex ">
+        <NavLink
+          to={`/reporte/${fichaAceptada.idFichatecnica}`}
+          className="btn btn-primary my-auto"
+        >
+          Reportes
+        </NavLink>
         <button
           className="btn btn-success mx-2 py-0"
           onClick={() => btnVerTabla(fichaAceptada)}

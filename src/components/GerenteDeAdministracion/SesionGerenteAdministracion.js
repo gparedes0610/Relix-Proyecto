@@ -8,6 +8,7 @@ import tablaContext from "../../context/tabla/tablaContext";
 import fichaTecnicaContext from "../../context/fichaTecnica/fichaTecnicaContext";
 import ListaDeFichasAceptadasPorIngeniero from "../GerenteGeneral/ListaDeFichasAceptadasPorIngeniero";
 import { obtenerFichasAceptadas } from "../GerenteGeneral/apisGerenteGeneral";
+import ReportePipeLine from "../Backoffice/ReportePipeLine";
 
 function SesionGerenteAdministracion() {
   const [mostrartabla, setMostrartabla] = useState(false);
@@ -23,7 +24,8 @@ function SesionGerenteAdministracion() {
   ////////////////////////
   ///////////////////////////////
   const fichatecnicacontext = useContext(fichaTecnicaContext);
-  const { fichaTecnica, obtenerTodasLasFichasTecnicas } = fichatecnicacontext;
+  const { fichaTecnica, obtenerTodasLasFichasTecnicas, reportePepiline } =
+    fichatecnicacontext;
   //////////////////////////////
   const [fichasAceptadas, setFichasAceptadas] = useState([]); //aqui se guarda las fichas aceptadas
 
@@ -176,6 +178,15 @@ function SesionGerenteAdministracion() {
     );
     setMostrartabla(false);
   };
+
+  const descargarReportePepiline = () => {
+    console.log("entraste a descargarReportePepiline");
+    reportePepiline();
+    setBotonActivo(false);
+    setTimeout(() => {
+      setBotonActivo(true);
+    }, 3500);
+  };
   return (
     <div className="container-fluid">
       <h3 className="text-success text-uppercase">
@@ -264,6 +275,14 @@ function SesionGerenteAdministracion() {
         </div>
         <div className="col-12 col-xl-4">
           <p className="h3 text-uppercase">Lista de Fichas </p>
+          <button
+            className="w-100 btn btn-warning text-uppercase mb-3 fw-bolder"
+            //onClick={() => mostrarReportePipeline()}
+            onClick={() => descargarReportePepiline()}
+            disabled={!botonActivo}
+          >
+            Reporte Pipeline
+          </button>
           <ListaDeFichasAceptadasPorIngeniero
             setMostrartabla={setMostrartabla}
             mostrartabla={mostrartabla}
