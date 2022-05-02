@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/static/css/main.97c1395b.css",
+    "main.js": "/static/js/main.5a6f980d.js",
+    "static/media/password.svg": "/static/media/password.1768309a10cfaafe143085ac74174072.svg",
+    "static/media/login4.svg": "/static/media/login4.edf10e25454ed19e8c9783e48818939f.svg",
+    "static/media/relixjpg1.svg": "/static/media/relixjpg1.6c81d49cdcdcb9b51b7430c0a5e97cac.svg",
+    "static/media/register.svg": "/static/media/register.372263bccf869fef03a902e948323c63.svg",
+    "static/media/correopassword.svg": "/static/media/correopassword.a18e427df467f6374cff35e7816312c0.svg",
+    "static/media/foco.svg": "/static/media/foco.a9cf7f88ca2513fc40f85a1714ea6b4f.svg",
+    "static/media/ok.svg": "/static/media/ok.3b1386903a447acc67092ef9b7442bf8.svg",
+    "index.html": "/index.html",
+    "static/media/duplicar.svg": "/static/media/duplicar.8468e87a6eb79fd335acdbcd67868d39.svg",
+    "static/media/edit.svg": "/static/media/edit.1b6932e574120c8a64233216e7d775c4.svg",
+    "main.97c1395b.css.map": "/static/css/main.97c1395b.css.map",
+    "main.5a6f980d.js.map": "/static/js/main.5a6f980d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.97c1395b.css",
+    "static/js/main.5a6f980d.js"
+  ]
+}

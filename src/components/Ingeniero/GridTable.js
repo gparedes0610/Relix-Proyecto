@@ -17,8 +17,12 @@ import Select from "./Select";
 import Swal from "sweetalert2";
 import { round } from "../../utils";
 import { GridTable, useGridTable } from "../GridTable";
+import alertContext from "../../context/alertas/alertaContext";
 
 function Tabla() {
+  /////////////////////
+  const alertascontext = useContext(alertContext);
+  const { alerta, mostrarAlerta } = alertascontext;
   /////////////////////////////
   const [discount, setDiscount] = useState("");
   const tablacontext = useContext(tablaContext);
@@ -27,8 +31,9 @@ function Tabla() {
     agregarDatosTabla,
     guardarCotizacionEnLaBd,
     eliminarDatosTabla,
+    mensajeTabla,
+    mensajeErrorDetalleTabla,
   } = tablacontext;
-  //////////////////////////
   ///////////////////////////////
   const fichatecnicacontext = useContext(fichaTecnicaContext);
   const {
@@ -39,6 +44,13 @@ function Tabla() {
   } = fichatecnicacontext;
   //////////////////////////////
   const [botonActivo, setBotonActivo] = useState(true);
+
+  useEffect(() => {
+    if (mensajeTabla) {
+      console.log(mensajeTabla);
+      mostrarAlerta(mensajeTabla.msg, mensajeTabla.categoria);
+    }
+  }, [mensajeTabla]);
 
   useEffect(() => {
     obtenerTodasLasFichasTecnicas();
@@ -63,12 +75,10 @@ function Tabla() {
     {
       headerName: "SubPartida",
       field: "subpartidaDetallefichatecnica",
-      filter: true,
     },
     {
       headerName: "Marca",
       field: "marcaDetallefichatecnica",
-      filter: true,
     },
     {
       headerName: "Codigo ERP",
@@ -172,15 +182,15 @@ function Tabla() {
     },
     {
       headerName: "Costo Diseño",
-      field: "costopromedioProducto",
+      field: "costodisenoProducto",
     },
     {
       headerName: "Costo Total",
       field: "costototaling",
       getValue(data) {
-        const { cantidadDetallefichatecnica, costopromedioProducto } = data;
+        const { cantidadDetallefichatecnica, costodisenoProducto } = data;
         const cantidad = Number(cantidadDetallefichatecnica);
-        const costo = Number(costopromedioProducto);
+        const costo = Number(costodisenoProducto);
         const costoFinal = cantidad * costo;
         return costoFinal;
       },
@@ -423,14 +433,18 @@ function Tabla() {
   };
 
   const cotizacionGuardadaEnLaBd = () => {
-    console.log("se guardo", dataUpdated);
-    console.log("este es el id de esta ficha", fichaTecnica[0].idFichatecnica);
+    //BOTON GUARDAR
+    // console.log("se guardo", dataUpdated);
+    //console.log("este es el id de esta ficha", fichaTecnica[0].idFichatecnica);
 
     const tablaConIdDeFichaTecnica = dataUpdated.map((item) => ({
       ...item,
       idFichatecnica: fichaTecnica[0].idFichatecnica,
     }));
-    console.log("toda la tabla", tablaConIdDeFichaTecnica);
+    console.log(
+      "HICISTE CLICK EN EL BOTON GUARDAR Y SE ENVIO ESTO",
+      tablaConIdDeFichaTecnica
+    );
     guardarCotizacionEnLaBd(tablaConIdDeFichaTecnica);
   };
 
@@ -502,6 +516,23 @@ function Tabla() {
             <GridTable gridTable={gridTable} />
           </div>
         </div>
+        {alerta ? (
+          <div className={`${alerta.categoria} my-3`} role="alert">
+            {alerta.msg}
+          </div>
+        ) : null}
+        {mensajeErrorDetalleTabla && (
+          <div>
+            <p className="h-3 bg-secondary py-3 mt-1 text-white text-center text-uppercase fw-bolder">
+              Los numeros de fila mencionados pertenecen al excel
+            </p>
+            {mensajeErrorDetalleTabla.map((error) => (
+              <p className="text-uppercase text-danger fw-bolder my-2">
+                {error}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
       {/* TABLA */}
       <div className="row mt-3 mb-3">

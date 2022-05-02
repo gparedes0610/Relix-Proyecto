@@ -15,6 +15,8 @@ import {
   ALTA_NEGOCIO_GERENTE_ADMINISTRACION,
   OBTENER_DATOS_TABLA_REPORTE,
   ELIMINAR_TABLA,
+  ERROR_TABLA,
+  ERROR_TABLA_DETALLE,
 } from "../../types";
 import clienteAxios from "../../config/axios";
 
@@ -25,6 +27,8 @@ const TablaStateProvider = (props) => {
     cotizaciones: [],
     rptaAltaNegocio: null,
     rptaAltaNegocioAdministracion: null,
+    mensajeTabla: "",
+    mensajeErrorDetalleTabla: null,
   };
 
   const [state, dispatch] = useReducer(tablaReducer, initialState);
@@ -89,6 +93,7 @@ const TablaStateProvider = (props) => {
         "Estoy en obtenerDatosTablaGerenteGeneral y este es el resultado",
         resultado.data
       );
+
       dispatch({
         type: OBTENER_DATOS_TABLA_REPORTE,
         payload: resultado.data, // lo ejecuta usefect al cargar la pagina
@@ -140,18 +145,39 @@ const TablaStateProvider = (props) => {
     console.log("estas en agregarDatosTabla y has enviado", datos);
     try {
       const resultado = await clienteAxios.post("/detallefichatecnica", datos);
-      console.log("resultado de agregarDatosTabla", resultado);
+      // console.log("resultado de agregarDatosTabla", resultado);
       console.log(
-        "resultado de agregarDatosTabla,ESTO ES LO Q ME DEVUELVE",
+        "ESTO ME DEVUELVE EL BACKEND AL CARGAR UNA TABLA",
         resultado.data
       );
+      if (resultado.data.Errores) {
+        console.log("existen errores");
+      }
+      agarrarError(resultado.data.Errores);
       dispatch({
         type: AGREGAR_DATOS_TABLA,
         payload: resultado.data,
       });
     } catch (error) {
       console.log(error);
+      console.log(error.response.data.messages.error);
+      const alerta = {
+        msg: error.response.data.messages.error,
+        categoria: "alert alert-danger",
+      };
+      dispatch({
+        type: ERROR_TABLA,
+        payload: alerta,
+      });
     }
+  };
+  const agarrarError = (error) => {
+    console.log("chapaste el error", error);
+
+    dispatch({
+      type: ERROR_TABLA_DETALLE,
+      payload: error,
+    });
   };
   const eliminarDatosTabla = async (id) => {
     //tarea.id = uuidv4();
@@ -184,11 +210,11 @@ const TablaStateProvider = (props) => {
     });
   }; */
   const guardarCotizacionEnLaBd = async (data) => {
-    console.log("esta es la data en guardarCotizacionEnLaBd ", data);
+    //console.log("esta es la data en guardarCotizacionEnLaBd ", data);
     try {
       const resultado = await clienteAxios.put("/guardardataficha", data);
-      console.log("resultado de agregarDatosTabla", resultado);
-      console.log("resultado de agregarDatosTabla", resultado.data);
+      // console.log("resultado de guardarCotizacionEnLaBd", resultado);
+      console.log("resultado de guardarCotizacionEnLaBd", resultado.data);
       dispatch({
         type: GUARDAR_COTIZACIONES_EN_LA_BD,
         payload: resultado.data,
@@ -207,10 +233,10 @@ const TablaStateProvider = (props) => {
         tablaDatosGerenteGeneral: state.tablaDatosGerenteGeneral,
         rptaAltaNegocio: state.rptaAltaNegocio,
         rptaAltaNegocioAdministracion: state.rptaAltaNegocioAdministracion,
+        mensajeTabla: state.mensajeTabla,
+        mensajeErrorDetalleTabla: state.mensajeErrorDetalleTabla,
         obtenerDatosTabla,
         agregarDatosTabla,
-        //actualizarDatosTabla,
-        //guardarCotizacion,
         guardarCotizacionEnLaBd,
         obtenerDatosTablaGerenteGeneral,
         altaNegocio,

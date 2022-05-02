@@ -41,6 +41,8 @@ import PrivateRouteReportes from "./rutas/PrivateRouteReportes";
 //reportes
 import Reporte from "./components/Backoffice/Reporte";
 
+//maestro producto
+import MaestroProducto from "./views/MaestroProducto";
 function App() {
   //revisar si tenemos un token
   const token = localStorage.getItem("token");
@@ -114,6 +116,10 @@ function App() {
                   path="/recuperar-password"
                   element={<OlvidastePassword />}
                 />
+                <Route
+                  path="/maestro-producto"
+                  element={<MaestroProducto />}
+                ></Route>
               </Routes>
             </Router>
           </TablaStateProvider>

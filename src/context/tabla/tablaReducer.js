@@ -9,6 +9,8 @@ import {
   ALTA_NEGOCIO_GERENTE_ADMINISTRACION,
   OBTENER_DATOS_TABLA_REPORTE,
   ELIMINAR_TABLA,
+  ERROR_TABLA,
+  ERROR_TABLA_DETALLE,
 } from "../../types";
 
 const tableReducer = (state, action) => {
@@ -17,6 +19,7 @@ const tableReducer = (state, action) => {
       return {
         ...state,
         tablaDatos: action.payload,
+        mensajeErrorDetalleTabla: null,
       };
     case OBTENER_DATOS_TABLA_GERENTE_GENERAL:
       return {
@@ -33,7 +36,12 @@ const tableReducer = (state, action) => {
     case AGREGAR_DATOS_TABLA:
       return {
         ...state,
-        tablaDatos: action.payload,
+        tablaDatos: action.payload.Detalle,
+      };
+    case ERROR_TABLA_DETALLE:
+      return {
+        ...state,
+        mensajeErrorDetalleTabla: action.payload,
       };
     case GUARDAR_COTIZACIONES:
       return {
@@ -59,6 +67,11 @@ const tableReducer = (state, action) => {
       return {
         ...state,
         tablaDatos: [],
+      };
+    case ERROR_TABLA:
+      return {
+        ...state,
+        mensajeTabla: action.payload,
       };
     /* case ACTUALIZAR_DATOS_TABLA:
       const { rowUpdated, keyId } = action.payload;

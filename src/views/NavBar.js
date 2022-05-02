@@ -13,6 +13,12 @@ function NavBar() {
   const fichatecnicacontext = useContext(fichaTecnicaContext);
   const { fichaTecnica } = fichatecnicacontext;
   //////////////////////////////
+  const btnMaestroProducto = () => {
+    console.log("hiciste click en maestro producto");
+  };
+  if (!usuario) {
+    return null;
+  }
   return (
     <Navbar expand="lg" style={{ background: "#e3f2fd" }} className="mb-4">
       <Container fluid>
@@ -67,14 +73,14 @@ function NavBar() {
               id="basic-nav-dropdown"
               className="pe-5"
             >
+              {usuario.idRol == "4" && (
+                <NavDropdown.Item onClick={() => btnMaestroProducto()}>
+                  Maestro de Producto
+                </NavDropdown.Item>
+              )}
               <NavDropdown.Item onClick={() => cerrarSesion()}>
                 Cerrar Sesion
               </NavDropdown.Item>
-              {/*  {usuario.idRol == "1" && (
-                  <NavDropdown.Item onClick={() => BtnverUsuarios()}>
-                    Administracion de usuarios
-                  </NavDropdown.Item>
-                )} */}
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

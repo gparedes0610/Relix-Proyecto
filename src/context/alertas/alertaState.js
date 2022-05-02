@@ -11,6 +11,7 @@ const AlertaStateProvider = (props) => {
   const [state, dispatch] = useReducer(alertaReducer, initialState);
   //funciones
   const mostrarAlerta = (msg, categoria) => {
+    console.log("entraste a mostrar alerta");
     dispatch({
       type: MOSTRAR_ALERTA,
       payload: {

@@ -225,6 +225,14 @@ function SesionBackOffice() {
                   />
                 </div>
               </div>
+              <div className="row my-3">
+                <div className="col-12">
+                  <button className="btn btn-success">Guardar Tabla</button>
+                  <button className="btn btn-primary ms-4">
+                    Generar RQ Pedido
+                  </button>
+                </div>
+              </div>
             </div>
           ) : mostrarReportePipeLine ? null : (
             <p className="lead h3 text-uppercase text-primary">
