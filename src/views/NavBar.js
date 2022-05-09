@@ -4,6 +4,8 @@ import LogoRelix from "../assets/relixsinfondo.png";
 
 import authContext from "../context/autenticacion/authContext";
 import fichaTecnicaContext from "../context/fichaTecnica/fichaTecnicaContext";
+
+import { Link, useNavigate } from "react-router-dom";
 function NavBar() {
   /////////////////////////////////
   const autentificaciones = useContext(authContext);
@@ -13,8 +15,17 @@ function NavBar() {
   const fichatecnicacontext = useContext(fichaTecnicaContext);
   const { fichaTecnica } = fichatecnicacontext;
   //////////////////////////////
+
+  const navigate = useNavigate();
   const btnMaestroProducto = () => {
     console.log("hiciste click en maestro producto");
+    //navigate("/maestro-producto");
+    //navigate("/maestro-producto");
+  };
+
+  const sesionCerrada = () => {
+    cerrarSesion();
+    navigate("/");
   };
   if (!usuario) {
     return null;
@@ -75,10 +86,16 @@ function NavBar() {
             >
               {usuario.idRol == "4" && (
                 <NavDropdown.Item onClick={() => btnMaestroProducto()}>
-                  Maestro de Producto
+                  <Link
+                    to="maestro-producto"
+                    style={{ textDecoration: "none" }}
+                    className="text-black"
+                  >
+                    Maestro de Producto
+                  </Link>
                 </NavDropdown.Item>
               )}
-              <NavDropdown.Item onClick={() => cerrarSesion()}>
+              <NavDropdown.Item onClick={() => sesionCerrada()} className="">
                 Cerrar Sesion
               </NavDropdown.Item>
             </NavDropdown>

@@ -98,7 +98,7 @@ const FichaTecnicaStateProvider = (props) => {
         "/detallefichatecnica",
         idFichaTecnica
       );
-      console.log("resultado de guardarCotizacion", resultado);
+      // console.log("resultado de guardarCotizacion", resultado);
       console.log("resultado de guardarCotizacion", resultado.data); //me regresa objeto de ficha tecnica con valores cambiados
       dispatch({
         type: ENVIAR_GUARDAR_COTIZACION,

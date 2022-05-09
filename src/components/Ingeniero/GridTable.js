@@ -66,7 +66,7 @@ function Tabla() {
     {
       headerName: "Partida",
       field: "partidaDetallefichatecnica",
-      filter: true,
+      filter: false,
       /*  headerCheckboxSelection: true,
       headerCheckboxSelectionFilteredOnly: true,
       checkboxSelection: true, */
@@ -75,31 +75,39 @@ function Tabla() {
     {
       headerName: "SubPartida",
       field: "subpartidaDetallefichatecnica",
+      filter: false,
+      filter: true,
     },
     {
       headerName: "Marca",
       field: "marcaDetallefichatecnica",
+      filter: false,
     },
     {
       headerName: "Codigo ERP",
       field: "codigosoftcomProducto",
+      filter: false,
     },
     {
       headerName: "Codido Proveedor",
       field: "codigoproveedorDetallefichatecnica",
+      filter: false,
     },
 
     {
       headerName: "Descripcion",
       field: "descripcionDetallefichatecnica",
+      filter: false,
     },
     {
       headerName: "Cantidad Total",
       field: "cantidadDetallefichatecnica",
+      filter: false,
     },
     {
       headerName: "PreUnitario",
       field: "preciounitarioDetallefichatecnica",
+      filter: false,
 
       render: ({ value, setValue, rowState }) => {
         const cellPrecioConD = rowState.state.find(
@@ -158,6 +166,7 @@ function Tabla() {
     {
       headerName: "Precio Total",
       field: "preciototalDetallefichatecnica",
+      filter: false,
       getValue(rowData) {
         const precioTotal =
           Number(
@@ -174,7 +183,9 @@ function Tabla() {
         const isDecimal = precioTotal - Math.floor(precioTotal) !== 0;
 
         const result = `$ ${
-          isDecimal ? round(precioTotal, 2).toFixed(2) : precioTotal + ".00"
+          isDecimal
+            ? round(precioTotal, 2).toFixed(2)
+            : precioTotal /* + ".00" */
         }`;
 
         return result;
@@ -183,10 +194,12 @@ function Tabla() {
     {
       headerName: "Costo Diseño",
       field: "costodisenoProducto",
+      filter: false,
     },
     {
       headerName: "Costo Total",
       field: "costototaling",
+      filter: false,
       getValue(data) {
         const { cantidadDetallefichatecnica, costodisenoProducto } = data;
         const cantidad = Number(cantidadDetallefichatecnica);
@@ -224,6 +237,7 @@ function Tabla() {
     {
       label: "Descuento general",
       field: "descuentototalDetallefichatecnica",
+      filter: false,
       getValue(rowData) {
         if (
           rowData.descuentototalDetallefichatecnica === undefined ||
@@ -237,6 +251,7 @@ function Tabla() {
     {
       headerName: "Precio Con descuento",
       key: "preciocondescuento",
+      filter: false,
       getValue(rowData) {
         const descuento = Number(
           rowData.descuentounitarioDetallefichatecnica || 0
@@ -448,9 +463,19 @@ function Tabla() {
     guardarCotizacionEnLaBd(tablaConIdDeFichaTecnica);
   };
 
-  const eliminarTabla = () => {
+  const eliminarTabla = async () => {
     console.log("tabla eliminada id ", fichaTecnica[0].idFichatecnica);
-    eliminarDatosTabla(fichaTecnica[0].idFichatecnica);
+
+    const accionUsuario = await Swal.fire({
+      icon: "warning",
+      title: "Si elimina , por favor recarge la pagina",
+      showConfirmButton: true,
+      showCancelButton: true,
+    });
+
+    if (accionUsuario.isConfirmed) {
+      eliminarDatosTabla(fichaTecnica[0].idFichatecnica);
+    }
   };
 
   const cambiarEstado = () => {

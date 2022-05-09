@@ -9,7 +9,6 @@ import RegisterView from "./components/auth/RegisterView";
 
 import BackOfficeView from "./views/BackOfficeView";
 import GerenteView from "./views/GerenteView";
-import MaestroView from "./views/MaestroView";
 //import Aside from "./views/Aside";
 import Cus014 from "./views/Cus014";
 import Cu08 from "./views/Cu08";
@@ -106,7 +105,6 @@ function App() {
                   path="/planeamiento-de-compras"
                   element={<PlaneamientoDeCompras />}
                 />
-                <Route path="/maestro" element={<MaestroView />} />
 
                 <Route
                   path="/cambiar-password"
@@ -117,7 +115,7 @@ function App() {
                   element={<OlvidastePassword />}
                 />
                 <Route
-                  path="/maestro-producto"
+                  path="/sesioniniciada/maestro-producto"
                   element={<MaestroProducto />}
                 ></Route>
               </Routes>

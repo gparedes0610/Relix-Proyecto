@@ -144,6 +144,16 @@ function SesionBackOffice() {
       ),
     },
     {
+      headerName: "Estado",
+      field: "nombreEstado",
+      //filter: true,
+      cellRendererFramework: (params) => (
+        <>
+          <span>{params.data.nombreEstado}</span>
+        </>
+      ),
+    },
+    {
       headerName: "Observaciones",
       field: "observacionDetallefichatecnica",
       editable: true,
