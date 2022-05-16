@@ -229,7 +229,7 @@ function Tabla() {
             // value={value === 2 ? value === 100 : value}
             // onChange={(e) => setValue(Number(e.target.value))}
             onChange={(e) => setValue(e.target.value)}
-            // onChange={(e) => setValue(value === 0 ? 100 : Number(e.target.value))}
+            //onChange={(e) => setValue(value === 0 ? 100 : Number(e.target.value))}
           />
         );
       },
@@ -334,7 +334,7 @@ function Tabla() {
           //precioventacincoProducto,
         } = newRowData;
         const options = {
-          optionSelected: precioventaunoProducto,
+          optionSelected: precioventatresProducto,
           precioventaunoProducto,
           precioventadosProducto,
           precioventatresProducto,

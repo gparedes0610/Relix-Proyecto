@@ -57,22 +57,23 @@ const TablaStateProvider = (props) => {
   };
 
   //obtener valores en la Tabla para gerente general
-  const obtenerDatosTablaGerenteGeneral = async (ficha) => {
+  const obtenerDatosTablaGerenteGeneral = async (id) => {
     //se envio la ficha completo, pero luego solo se envia el idficha en el get
-    /* console.log(
+    console.log(
       "entraste a obtenerDatosTablaGerenteGeneral y el id enviado es",
-      ficha.idFichatecnica
-    ); */
+      id
+    );
+
     try {
       const resultado = await clienteAxios.get(
-        `/listarDetalleGerenteGeneral/${ficha.idFichatecnica}`
+        `/listarDetalleGerenteGeneral/${id}`
       );
 
       //console.log("TABLA", ficha);
-      /* console.log(
+      console.log(
         "Estoy en obtenerDatosTablaGerenteGeneral y este es el resultado",
         resultado.data
-      ); */
+      );
       dispatch({
         type: OBTENER_DATOS_TABLA_GERENTE_GENERAL,
         payload: resultado.data, // lo ejecuta usefect al cargar la pagina
@@ -210,11 +211,11 @@ const TablaStateProvider = (props) => {
     });
   }; */
   const guardarCotizacionEnLaBd = async (data) => {
-    //console.log("esta es la data en guardarCotizacionEnLaBd ", data);
+    console.log("esta es la data en el boton Guardar ", data);
     try {
       const resultado = await clienteAxios.put("/guardardataficha", data);
       // console.log("resultado de guardarCotizacionEnLaBd", resultado);
-      console.log("resultado de guardarCotizacionEnLaBd", resultado.data);
+      console.log("resultado de BACKEND del boton guardar", resultado.data);
       dispatch({
         type: GUARDAR_COTIZACIONES_EN_LA_BD,
         payload: resultado.data,

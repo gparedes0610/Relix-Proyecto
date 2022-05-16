@@ -111,6 +111,7 @@ function Reporte() {
   };
 
   const [botonActivo, setBotonActivo] = useState(true);
+
   const manejarSubmit = (e) => {
     e.preventDefault();
     console.log("entraste a manejarSubmit");

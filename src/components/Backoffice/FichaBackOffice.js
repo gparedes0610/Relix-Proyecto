@@ -39,9 +39,9 @@ function FichaBackOffice({
     );
     clasesPrueba(i + 1);
     setMostrartabla(true);
-    obtenerDatosTablaGerenteGeneral(fichaAceptada);
+    obtenerDatosTablaGerenteGeneral(fichaAceptada.idFichatecnica);
     setMostrarReportePipeLine(false);
-    // fichaTecnicaActual(fichaAceptada.idFichatecnica);
+    fichaTecnicaActual(fichaAceptada.idFichatecnica);
   };
   return (
     <li

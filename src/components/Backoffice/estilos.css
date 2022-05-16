@@ -1,0 +1,9 @@
+.contenedor {
+  height: 550px;
+  overflow: auto;
+}
+
+.contenedor_tabla {
+  height: auto !important;
+  width: auto !important;
+}

@@ -15,14 +15,12 @@ function MaestroProducto() {
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
-
+  const handleClose = () => {
+    setShowModal(false);
+  };
   const ref = useRef();
   const reset = () => {
     ref.current.value = "";
-  };
-
-  const handleClose = () => {
-    setShowModal(false);
   };
 
   const btnAgregarProducto = () => {
