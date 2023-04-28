@@ -827,7 +827,7 @@ function VerFichasTecnicasIngeniero() {
   };
 
   const EnviarguardadoCotizacion = async () => {
-     const accionUsuario = await Swal.fire({
+     /* const accionUsuario = await Swal.fire({
       icon: "warning",
       title: "Recuerde que una ves enviado no se podra modificar mas",
       showConfirmButton: true,
@@ -838,10 +838,10 @@ function VerFichasTecnicasIngeniero() {
       guardarCotizacion(fichaTecnica.idFichatecnica);
       obtenerFichasTecnicasIngeniero(idUsuario);
       setMostarFicha(false);
-    } 
+    }  */
     //guardar cotizacion
 
-     /* Swal.fire({
+     Swal.fire({
       title: "Solicitar a gerencia general:",
       html: `<input type="text" id="mensaje" class="swal2-input" placeholder="Mensaje">
     `,
@@ -855,28 +855,28 @@ function VerFichasTecnicasIngeniero() {
       },
     }).then((result) => {
       console.log(result);
-    }); */
+    });
   };
 
-  const guardarCotizacion = async (idFichaTecnica) => {
+  const guardarCotizacion = async (mensaje,idFichaTecnica) => {
     //mensaje
     // console.log("en guardarCotizacion el id es", idFichaTecnica);
     // console.log(mensaje, idFichaTecnica);
    
-       /*  const datos = {
+        const datos = {
       idfichatecnica: idFichaTecnica,
       mensaje:mensaje,
       idfichatecnica:fichaTecnica.idfichatecnica,
-    }; */
+    };
     try {
-     /*  const resultado = await clienteAxios.put(
+      const resultado = await clienteAxios.put(
         "/GuardarCotizacionIngeniero",
         idFichaTecnica
-      );  pro */
-      const resultado = await clienteAxios.put(
+      );  pro
+     /*  const resultado = await clienteAxios.put(
         "/detallefichatecnica",
         idFichaTecnica
-      );
+      ); */
       // console.log("resultado de guardarCotizacion", resultado);
       console.log("resultado de guardarCotizacion", resultado.data); //me regresa objeto de ficha tecnica con valores cambiados
       setFichaTecnica(resultado.data);
