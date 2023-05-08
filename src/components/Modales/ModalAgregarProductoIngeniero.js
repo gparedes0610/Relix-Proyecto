@@ -128,24 +128,7 @@ const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      /*  if (
-        numPartida.trim() === "" ||
-        idPartida.trim() === "" ||
-        subPartida.trim() === "" ||
-        modulo.trim() === "" ||
-        codErp.trim() === "" ||
-        cantTotal.trim() === "" ||
-        precioUnitario.trim() === "" ||
-        observacion.trim() === ""
-      ) {
-        Swal.fire(
-          "Sucedio un error",
-          "Verifique si lo hizo bien el proceso o le falto aun campo",
-          "error"
-        );
-        return;
-      } */
+    /* try {
       if (productoPorBusqueda) {
         if (
           productoPorBusqueda.codigosoftcomProducto == "9999999999" ||
@@ -214,7 +197,78 @@ const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
         handleClose();
 
         return;
-      }
+      } */
+
+      try {
+        if (
+          productoPorBusqueda.codigosoftcomProducto == "9999999999" ||
+          productoPorBusqueda.codigosoftcomProducto == "0170020200"
+        ){
+          console.log('existe condicional');
+          const data = {
+            ...registrarProducto,
+            subPartida:codSubPartidaObtenido,
+            idPartida:codPartidaObtenido,
+            descripcion: productoPorBusqueda.descripcionProducto,
+            costoDiseno: productoPorBusqueda.costodisenoProducto,
+            idFichatecnica: fichaTecnica.idFichatecnica,
+          };
+          console.log("esta data final  9999 ===>", data);
+          await peticionAgregarProductoModuloIngeniero(data);
+          await obtenerDetalleTecnicasIngeniero(fichaTecnica.idFichatecnica);
+  
+          setRegistrarProducto({
+            numPartida: "",
+            idPartida: "",
+            subPartida: "",
+            marca: "",
+            codProveedor: "",
+            codErp: "",
+            descripcion: "",
+            cantTotal: "",
+            precioUnitario: "",
+            costoDiseno: "",
+            descuento: "",
+            observacion: "",
+            modulo: "",
+          });
+          setProductoPorBusqueda(null);
+  
+          handleClose();
+        }else{
+          console.log('No existe condicional');
+          const data = {
+            ...registrarProducto,
+            subPartida:codSubPartidaObtenido,
+            idPartida:codPartidaObtenido,
+            costoDiseno: productoPorBusqueda.costodisenoProducto,
+            idFichatecnica: fichaTecnica.idFichatecnica,
+          };
+          console.log("esta data final ===>", data);
+  
+          await peticionAgregarProductoModuloIngeniero(data);
+          await obtenerDetalleTecnicasIngeniero(fichaTecnica.idFichatecnica);
+  
+          setRegistrarProducto({
+            numPartida: "",
+            idPartida: "",
+            subPartida: "",
+            marca: "",
+            codProveedor: "",
+            codErp: "",
+            descripcion: "",
+            cantTotal: "",
+            precioUnitario: "",
+            costoDiseno: "",
+            descuento: "",
+            observacion: "",
+            modulo: "",
+          });
+          setProductoPorBusqueda(null);
+          handleClose();
+  
+          return;
+        } 
     } catch (error) {
       console.log(error);
     }
@@ -645,13 +699,13 @@ const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
                     type="text"
                     placeholder="Ingrese Observacion:"
                     name="adicional"
-                    value={"Adicional"}
+                    value={"Pendiente"}
                     //onChange={(e) => actualizarInput(e)}
                     disabled
                   />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicText">
+               {/*  <Form.Group className="mb-3" controlId="formBasicText">
                   <Form.Label className="text-uppercase">
                     Observacion:
                   </Form.Label>
@@ -663,7 +717,7 @@ const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
                     onChange={(e) => actualizarInput(e)}
                     required
                   />
-                </Form.Group>
+                </Form.Group> */}
 
                 <Button className="btn btn-success mt-3" type="submit">
                   Guardar

@@ -32,7 +32,7 @@ import VerRequerimientosPedidos from "./components/Modulos/VerRequerimientosPedi
 import ReporteFichaProyecto from "./components/Modulos/ReporteFichaProyecto";
 import Guias from "./components/Modulos/Guias";
 import ModuloDescargaDeArchivos from "./components/Modulos/ModuloDescargaDeArchivos";
-/* import VerDescargaDeArchivos from "./components/Modulos/VerDescargaDeArchivos"; */
+import VerDescargaDeArchivos from "./components/Modulos/VerDescargaDeArchivos";
 //MODULOS fin
 import OlvidastePassword from "./components/auth/OlvidastePassword";
 import RecuperarPassword from "./components/auth/RecuperarPassword";
@@ -238,14 +238,14 @@ function App() {
                   </PrivateRoute>
                 }
               />
-             {/*  <Route
+              <Route
                 path="/gestor-archivos"
                 element={
                   <PrivateRoute>
                     <VerDescargaDeArchivos />
                   </PrivateRoute>
                 }
-              /> */}
+              />
               <Route
                 path="ver-fichas-tecnicas-gerente-administacion/:id"
                 element={

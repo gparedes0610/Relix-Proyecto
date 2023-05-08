@@ -12,8 +12,10 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import { peticionObtenerRoles } from "./service/rolesService";
-
+import {
+  peticionObtenerAcciones,
+  peticionObtenerRoles,
+} from "./service/rolesService";
 
 function Registrar() {
   /////////////////////////////////
@@ -26,10 +28,10 @@ function Registrar() {
   /////////////////////////////////
   const [infoPeticion, setInfoPeticion] = useState("");
   const [banderaPeticion, setbanderaPeticion] = useState(false);
-    const [todosLosUsuarios, setTodosLosUsuarios] = useState([]);
+  const [todosLosUsuarios, setTodosLosUsuarios] = useState([]);
   //
-  const [roles, setRoles] = useState(null)
-
+  const [roles, setRoles] = useState(null);
+  const [acciones, setAcciones] = useState([]);
 
   useEffect(() => {
     if (mensaje) {
@@ -40,23 +42,39 @@ function Registrar() {
 
   useEffect(() => {
     peticionMostrarUsuarios();
-   
+
     setTimeout(() => {
-      obtenerTodosLosRoles()
-    }, 3000);
+      obtenerTodosLosRoles();
+    }, 2300);
+    obtenerTodosLasAcciones();
   }, []);
 
-  const obtenerTodosLosRoles =async()=>{
-    const roles = await peticionObtenerRoles()
-    setRoles(roles)
-   // console.log('ver roles =>',roles)
-  }
+  const obtenerTodosLosRoles = async () => {
+    const roles = await peticionObtenerRoles();
+    setRoles(roles);
+    // console.log('ver roles =>',roles)
+  };
+
+  const obtenerTodosLasAcciones = async () => {
+    try {
+      const acciones = await peticionObtenerAcciones();
+
+      setAcciones(acciones);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    obtenerTodosLasAcciones();
+  }, [2000]);
 
   const [registrarUsuario, setregistrarUsuario] = useState({
     idUsuario: "",
     nombreUsuario: "",
     correoUsuario: "",
     apellidoUsuario: "",
+    nombreRol: "",
     idRol: "",
     rutas: [],
   });
@@ -66,6 +84,7 @@ function Registrar() {
     correoUsuario,
     idRol,
     idUsuario,
+    nombreRol,
     rutas,
   } = registrarUsuario;
 
@@ -118,10 +137,33 @@ function Registrar() {
   } = listaChecks;
 
   const actualizarCheckout = (e) => {
-    setListaChecks({
+    /*   setListaChecks({
       ...listaChecks,
       [e.target.name]: e.target.checked,
-    });
+    }); */
+  };
+  const [rutasFinales, setRutasFinales] = useState([]);
+
+  const handleCheckboxChange = (event) => {
+    //console.log('funciona?');
+    const { name, checked } = event.target;
+    console.log("name", name, "checked", checked);
+    const updatedCheckboxes = acciones.map((checkbox) =>
+      checkbox.idModulosistema === name ? { ...checkbox, checked } : checkbox
+    );
+    const newArray = updatedCheckboxes.map(({ idModulosistema, checked }) => ({
+      idModulosistema,
+      checked,
+    }));
+    const renamedArray = newArray.map(
+      ({ idModulosistema: id, checked: estado }) => ({ id, estado })
+    );
+
+    setAcciones(updatedCheckboxes);
+    //console.log("ver updatedCheckboxes", updatedCheckboxes);
+    //console.log(newArray);
+    // console.log(renamedArray);
+    setRutasFinales(renamedArray);
   };
 
   //error
@@ -217,80 +259,7 @@ function Registrar() {
         correoUsuario: correoUsuario,
         apellidoUsuario: apellidoUsuario,
         idRol: idRol,
-        rutas: [
-          {
-            id: "1",
-            estado: moduloRegistroUsuario,
-          },
-          {
-            id: "2",
-            estado: moduloRegistrarFichaTecnica,
-          },
-          {
-            id: "3",
-            estado: moduloVerFichasTecnicasDisenador,
-          },
-          {
-            id: "4",
-            estado: moduloVerFichasTecnicasBackoffice,
-          },
-          {
-            id: "5",
-            estado: moduloVerFichasTecnicasIngeniero,
-          },
-          {
-            id: "6",
-            estado: moduloDescargarReportePipeLine,
-          },
-          {
-            id: "7",
-            estado: moduloReportePresupuesto,
-          },
-          {
-            id: "8",
-            estado: moduloReporteAnalisis,
-          },
-          {
-            id: "9",
-            estado: moduloRegistroVendedor,
-          },
-          {
-            id: "10",
-            estado: moduloVerFichasTecnicasGerenteGeneral,
-          },
-          {
-            id: "11",
-            estado: moduloReporteCotizacion,
-          },
-          {
-            id: "12",
-            estado: moduloFichaDeGastos,
-          },
-          {
-            id: "13",
-            estado: moduloEditarFichaTecnica,
-          },
-          {
-            id: "14",
-            estado: moduloVerFichasTecnicasGerenteAdministracion,
-          },
-          {
-            id: "15",
-            estado: moduloActualizarMargen,
-          },
-          {
-            id: "16",
-            estado: moduloRegistroPartidasSubpartidas,
-          },
-          {
-            id: "17",
-            estado: moduloMaestroProducto,
-          },
-          {
-            id: "18",
-            estado: moduloMaestroCosto,
-          },
-        ],
+        rutas: rutasFinales,
       };
       console.log("funciona haber data", data);
       peticionRegistrarUsuario(data);
@@ -309,146 +278,37 @@ function Registrar() {
       correoUsuario: "",
       apellidoUsuario: "",
       idRol: "",
-    });
-    setListaChecks({
-      moduloRegistroUsuario: "",
-      moduloRegistrarFichaTecnica: "",
-      moduloVerFichasTecnicasDisenador: "",
-      moduloVerFichasTecnicasBackoffice: "",
-      moduloVerFichasTecnicasIngeniero: "",
-      moduloDescargarReportePipeLine: "",
-      moduloReportePresupuesto: "",
-      moduloReporteAnalisis: "",
-      moduloVerFichasTecnicasGerenteGeneral: "",
-      moduloVerFichasTecnicasGerenteAdministracion: "",
-      moduloActualizarMargen: "",
-      moduloRegistroPartidasSubpartidas: "",
-      moduloMaestroProducto: "",
-      moduloMaestroCosto: "",
-      moduloReporteCotizacion: "",
-      moduloFichaDeGastos: "",
-      moduloEditarFichaTecnica: "",
-      moduloRegistroVendedor: "",
+      rutas:[]
     });
   };
   const handleShow = () => setShow(true);
+  const [copiaRutas, setCopiaRutas] = useState([]);
   const seleccionarUsuario = (item) => {
     console.log("estas Editando", item);
     setregistrarUsuario(item);
-    /*    if (item.rutas.length <= 0) {
-      setListaChecks({
-        moduloRegistroUsuario: "",
-        moduloRegistrarFichaTecnica: "",
-        moduloVerFichasTecnicasDisenador: "",
-        moduloVerFichasTecnicasBackoffice: "",
-        moduloVerFichasTecnicasIngeniero: "",
-        moduloDescargarReportePipeLine: "",
-        moduloReportePresupuesto: "",
-        moduloReporteAnalisis: "",
-        moduloRegistroVendedor: "",
-        moduloVerFichasTecnicasGerenteGeneral: "",
-        moduloVerFichasTecnicasGerenteAdministracion: "",
-        moduloActualizarMargen: "",
-        moduloRegistroPartidasSubpartidas: "",
-        moduloMaestroProducto: "",
-        moduloReporteCotizacion: "",
-        moduloFichaDeGastos: "",
-        moduloEditarFichaTecnica: "",
-      });
-    } else {
-    } */
-
+    setCopiaRutas(item.rutas);
     handleShow();
   };
 
   //modal EDITAR AQUI ES PARA PONER MAS MODULOS NO OLVIDAR
   const editarUsuario = async () => {
-    console.log("estas editando");
-    console.log("haber id", idUsuario);
+  //  console.log("estas editando");
+    //console.log("haber id", idUsuario);
+   // console.log("data editada", registrarUsuario);
+   
+    //console.log('copiaRutas',copiaRutas);
     try {
-      const data = {
+        const data = {
         nombreUsuario: nombreUsuario,
         correoUsuario: correoUsuario,
         apellidoUsuario: apellidoUsuario,
         idRol: idRol,
-        rutas: [
-          {
-            id: "1",
-            estado: moduloRegistroUsuario,
-          },
-          {
-            id: "2",
-            estado: moduloRegistrarFichaTecnica,
-          },
-          {
-            id: "3",
-            estado: moduloVerFichasTecnicasDisenador,
-          },
-          {
-            id: "4",
-            estado: moduloVerFichasTecnicasBackoffice,
-          },
-          {
-            id: "5",
-            estado: moduloVerFichasTecnicasIngeniero,
-          },
-          {
-            id: "6",
-            estado: moduloDescargarReportePipeLine,
-          },
-          {
-            id: "7",
-            estado: moduloReportePresupuesto,
-          },
-          {
-            id: "8",
-            estado: moduloReporteAnalisis,
-          },
-          {
-            id: "9",
-            estado: moduloRegistroVendedor,
-          },
-          {
-            id: "10",
-            estado: moduloVerFichasTecnicasGerenteGeneral,
-          },
-          {
-            id: "11",
-            estado: moduloReporteCotizacion,
-          },
-          {
-            id: "12",
-            estado: moduloFichaDeGastos,
-          },
-          {
-            id: "13",
-            estado: moduloEditarFichaTecnica,
-          },
-          {
-            id: "14",
-            estado: moduloVerFichasTecnicasGerenteAdministracion,
-          },
-          {
-            id: "15",
-            estado: moduloActualizarMargen,
-          },
-          {
-            id: "16",
-            estado: moduloRegistroPartidasSubpartidas,
-          },
-          {
-            id: "17",
-            estado: moduloMaestroProducto,
-          },
-          {
-            id: "18",
-            estado: moduloMaestroCosto,
-          },
-        ],
+        rutas: copiaRutas,
       };
 
       console.log("haber data para editar", data, "id", idUsuario);
       await peticionActualizarUsuario(idUsuario, data);
+    
       handleClose();
     } catch (error) {
       console.log(error);
@@ -460,15 +320,21 @@ function Registrar() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const handleCheckboxChange2 = (event, index) => {
+    const { checked } = event.target;
+    setCopiaRutas(prevState => prevState.map((accion, i) => {
+      if (i === index) {
+        return { ...accion, estado: checked };
+      } else {
+        return accion;
+      }
+    }));
+  };
+  
+
   return (
     <div className="pt-4 container">
-          <div className="row">
-                <div className="col-12 col-md-6">
-                  <div className="alert alert-info" role="alert">
-                    Se esta haciendo un upgrade de mejoria , muchas gracias !
-                  </div>
-                </div>
-              </div>
       <TabContext value={value}>
         <TabList aria-label="tabs example" onChange={handleChange}>
           <Tab label="Registrar Usuario" value="1" />
@@ -483,7 +349,7 @@ function Registrar() {
                 <h2 className="text-primary mb-4 text-uppercase">Registrar un Usuario</h2>
                 <hr />
               </div> */}
-          
+
               <row>
                 {!error ? (
                   <span className="text-danger">{error}</span>
@@ -588,21 +454,18 @@ function Registrar() {
                             <option value="" selected disabled hidden>
                               Seleccione
                             </option>
-                            {
-                             roles && (
-                              roles.map((usuario,i) =>
-                              (
-                                <option key={i}
-                                value={usuario.idRol}
-                                onChange={(e) => {
-                                  actualizarInput(e);
-                                }}
+                            {roles &&
+                              roles.map((usuario, i) => (
+                                <option
+                                  key={i}
+                                  value={usuario.idRol}
+                                  onChange={(e) => {
+                                    actualizarInput(e);
+                                  }}
                                 >
-                                 { usuario.nombreRol}
+                                  {usuario.nombreRol}
                                 </option>
-                              ))
-                             )
-                            }
+                              ))}
                           </Form.Select>
                         </Form.Group>
                         <Form.Group
@@ -615,18 +478,24 @@ function Registrar() {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloRegistroUsuario"
-                              value={moduloRegistroUsuario}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Registrar Usuario
-                          </label>
-                          <br />
+                          {acciones &&
+                            acciones.map((accion, i) => (
+                              <>
+                                <label>
+                                  <input
+                                    key={i}
+                                    type="checkbox"
+                                    name={accion.idModulosistema}
+                                    checked={accion.checked}
+                                    onChange={handleCheckboxChange}
+                                  />
+                                  {accion.nombreModulo}
+                                </label>
+                                <br />
+                              </>
+                            ))}
+
+                          {/*  <br />
                           <label>
                             <input
                               type="checkbox"
@@ -635,206 +504,7 @@ function Registrar() {
                               onChange={(e) => {
                                 actualizarCheckout(e);
                               }}
-                            />
-                            Registrar Ficha Técnica de Proyecto
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloVerFichasTecnicasDisenador"
-                              value={moduloVerFichasTecnicasDisenador}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Ver fichas tecnicas-Diseñador
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloVerFichasTecnicasBackoffice"
-                              value={moduloVerFichasTecnicasBackoffice}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Ver fichas tecnicas-Backoffice
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloVerFichasTecnicasIngeniero"
-                              value={moduloVerFichasTecnicasIngeniero}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Ver fichas tecnicas-Ingeniero
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloDescargarReportePipeLine"
-                              value={moduloDescargarReportePipeLine}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Descargar Reporte Pipeline
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloReportePresupuesto"
-                              value={moduloReportePresupuesto}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Reporte presupuesto
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloReporteAnalisis"
-                              value={moduloReporteAnalisis}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Reporte analisis
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloVerFichasTecnicasGerenteGeneral"
-                              value={moduloVerFichasTecnicasGerenteGeneral}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Ver fichas tecnicas - Gerente general
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloVerFichasTecnicasGerenteAdministracion"
-                              value={
-                                moduloVerFichasTecnicasGerenteAdministracion
-                              }
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Ver fichas tecnicas - Gerente administracion
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloActualizarMargen"
-                              value={moduloActualizarMargen}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Actualizar margen
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloRegistroPartidasSubpartidas"
-                              value={moduloRegistroPartidasSubpartidas}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Registro partidas y subpartidas
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloMaestroProducto"
-                              value={moduloMaestroProducto}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Maestro producto
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloMaestroCosto"
-                              value={moduloMaestroCosto}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Maestro Costo
-                          </label>
-
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloReporteCotizacion"
-                              value={moduloReporteCotizacion}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Metrado de materiales
-                          </label>
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloFichaDeGastos"
-                              value={moduloFichaDeGastos}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Modulo Ficha de gasto
-                          </label>
-
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloEditarFichaTecnica"
-                              value={moduloEditarFichaTecnica}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Modulo Editar ficha tecnica
-                          </label>
-
-                          <br />
-                          <label>
-                            <input
-                              type="checkbox"
-                              name="moduloRegistroVendedor"
-                              value={moduloRegistroVendedor}
-                              onChange={(e) => {
-                                actualizarCheckout(e);
-                              }}
-                            />
-                            Registrar Vendedor
-                          </label>
+                            /> */}
                         </Form.Group>
 
                         <Button
@@ -852,22 +522,6 @@ function Registrar() {
                     </div>
                   </div>
                 </div>
-
-                {/*  <div className="col-12 col-lg-6 mx-0 px-0 ">
-                  <img
-                    src={register}
-                    alt=""
-                    style={{
-                      background:
-                        "linear-gradient(180deg, #1478A3 0%, rgba(37, 182, 244, 0.51) 100%)",
-                      boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.15)",
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: "0 10px 10px 0",
-                    }}
-                    className="img-fluid"
-                  />
-                </div> */}
               </div>
             </div>
           </div>
@@ -878,7 +532,7 @@ function Registrar() {
             {/*         <h3 className="text-success mt-5">Lista de usuarios creados</h3> */}
             <hr />
             {todosLosUsuarios.length > 0 ? (
-              <Table  bordered hover>
+              <Table bordered hover>
                 <thead>
                   <tr>
                     <th>Nombre</th>
@@ -904,7 +558,7 @@ function Registrar() {
                             <span key={i}>
                               {ruta.estado === true ? (
                                 <span className="badge bg-primary mx-1">
-                                  {ruta.nombreModulo} 
+                                  {ruta.nombreModulo}
                                 </span>
                               ) : (
                                 <span className="badge bg-danger mx-1">
@@ -977,6 +631,7 @@ function Registrar() {
                     onChange={(e) => actualizarInput(e)}
                   />
                   <br />
+                  <label>Rol</label>
                   <Form.Select
                     defaultValue="Seleccione"
                     name="idRol"
@@ -985,41 +640,62 @@ function Registrar() {
                       actualizarInput(e);
                     }}
                   >
-                    <option value="" selected disabled hidden>
-                      Seleccione
-                    </option>
-                    <option value="1">Administrador de sistema</option>
-                    <option value="2">Gerente general</option>
-                    <option value="3">Ingeniero</option>
-                    <option value="4">Backoffice</option>
-                    <option value="5">Gerente de administracion</option>
+                    {roles &&
+                      roles.map((usuario, i) =>
+                        usuario.nombreRol == registrarUsuario.nombreRol ? (
+                          <option
+                            key={i}
+                            value={usuario.idRol}
+                            selected
+                            onChange={(e) => {
+                              actualizarInput(e);
+                            }}
+                          >
+                            {registrarUsuario.nombreRol}
+                          </option>
+                        ) : (
+                          <option
+                            key={i}
+                            value={usuario.idRol}
+                            onChange={(e) => {
+                              actualizarInput(e);
+                            }}
+                          >
+                            {usuario.nombreRol}
+                          </option>
+                        )
+                      )}
                   </Form.Select>
                   <div className="text-warning my-2">
                     No se olvide de seleccionar modulos
                   </div>
-                  <label>
-                    {/*   {
-                    registrarUsuario.rutas.length> 1 &&(
-                      console.log('ver RUTAS 1=>',registrarUsuario.rutas[0].estado)
-                    )
-                    } */}
-                    <input
-                      type="checkbox"
-                      name="moduloRegistroUsuario"
-                      /*  checked={registrarUsuario.rutas.length> 1 && registrarUsuario.rutas[0].estado} */
-                      checked={listaChecks && listaChecks.moduloRegistroUsuario}
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Registrar Usuario
-                  </label>
-                  <br />
+                  {
+                       console.log('copiaRutas',copiaRutas)
+                  }
+                  {copiaRutas &&
+                    copiaRutas.map((accion, i) => (
+                      <>
+                        <label>
+                          <input
+                            key={i}
+                            type="checkbox"
+                            name={accion.rutaModulo}
+                            checked={accion.estado}
+                            onChange={(event) =>
+                              handleCheckboxChange2(event, i)
+                            }
+                          />
+                          {accion.nombreModulo}
+                        </label>
+                        <br />
+                      </>
+                    ))}
+
+                  {/*    <br />
                   <label>
                     <input
                       type="checkbox"
                       name="moduloRegistrarFichaTecnica"
-                      /* checked={registrarUsuario && registrarUsuario.rutas[1]} */
                       checked={
                         listaChecks && listaChecks.moduloRegistrarFichaTecnica
                       }
@@ -1029,230 +705,7 @@ function Registrar() {
                     />
                     Registrar Ficha Técnica de Proyecto
                   </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloVerFichasTecnicasDisenador"
-                      checked={
-                        listaChecks &&
-                        listaChecks.moduloVerFichasTecnicasDisenador
-                      }
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Ver Fichas tecnicas disenador
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloVerFichasTecnicasBackoffice"
-                      checked={
-                        listaChecks &&
-                        listaChecks.moduloVerFichasTecnicasBackoffice
-                      }
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Ver Fichas tecnicas backoffice
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloVerFichasTecnicasIngeniero"
-                      checked={
-                        listaChecks &&
-                        listaChecks.moduloVerFichasTecnicasIngeniero
-                      }
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Ver Fichas tecnicas ingeniero
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloDescargarReportePipeLine"
-                      checked={
-                        listaChecks &&
-                        listaChecks.moduloDescargarReportePipeLine
-                      }
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Descargar Reporte Pipeline
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloReportePresupuesto"
-                      checked={
-                        listaChecks && listaChecks.moduloReportePresupuesto
-                      }
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Reporte presupuesto
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloReporteAnalisis"
-                      checked={listaChecks && listaChecks.moduloReporteAnalisis}
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Reporte analisis
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloVerFichasTecnicasGerenteGeneral"
-                      checked={
-                        listaChecks &&
-                        listaChecks.moduloVerFichasTecnicasGerenteGeneral
-                      }
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Ver fichas tecnicas gerente general
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloVerFichasTecnicasGerenteAdministracion"
-                      checked={
-                        listaChecks &&
-                        listaChecks.moduloVerFichasTecnicasGerenteAdministracion
-                      }
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Ver fichas tecnicas gerente administracion
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloActualizarMargen"
-                      checked={
-                        listaChecks && listaChecks.moduloActualizarMargen
-                      }
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Actualizar margen
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloRegistroPartidasSubpartidas"
-                      checked={
-                        listaChecks &&
-                        listaChecks.moduloRegistroPartidasSubpartidas
-                      }
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Registro Partidas-Subpartidas
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloMaestroProducto"
-                      checked={listaChecks && listaChecks.moduloMaestroProducto}
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Maestro producto
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloMaestroCosto"
-                      checked={listaChecks && listaChecks.moduloMaestroCosto}
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Maestro Costo
-                  </label>
-
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloReporteCotizacion"
-                      checked={
-                        listaChecks && listaChecks.moduloReporteCotizacion
-                      }
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Metrado de materiales
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloFichaDeGastos"
-                      checked={listaChecks && listaChecks.moduloFichaDeGastos}
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Reporte ficha de gasto
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloEditarFichaTecnica"
-                      checked={
-                        listaChecks && listaChecks.moduloEditarFichaTecnica
-                      }
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Reporte Editar ficha tecnica
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="moduloRegistroVendedor"
-                      checked={
-                        listaChecks && listaChecks.moduloRegistroVendedor
-                      }
-                      onChange={(e) => {
-                        actualizarCheckout(e);
-                      }}
-                    />
-                    Registro vendedor
-                  </label>
+                  <br /> */}
                 </div>
               </Modal.Body>
               <Modal.Footer>

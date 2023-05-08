@@ -83,7 +83,10 @@ function VerFichasTecnicasIngeniero() {
   };
 
   useEffect(() => {
-    obtenerFichasTecnicasIngeniero(idUsuario);
+
+    setTimeout(() => {
+      obtenerFichasTecnicasIngeniero(idUsuario);
+    }, 2500);
   }, []);
 
   const btnVerTabla = (ficha, indice) => {
@@ -842,7 +845,8 @@ function VerFichasTecnicasIngeniero() {
     //guardar cotizacion
 
      Swal.fire({
-      title: "Solicitar a gerencia general:",
+    //  title: `"Solicitar a gerente de proyectos:"`,
+      title: `${nombreRol =='Gerente de Proyecto' ? "Solicitar a gerencia general:":"Solicitar a gerente de proyectos:"}`,
       html: `<input type="text" id="mensaje" class="swal2-input" placeholder="Mensaje">
     `,
       confirmButtonText: "Enviar mensaje",
@@ -859,6 +863,7 @@ function VerFichasTecnicasIngeniero() {
   };
 
   const guardarCotizacion = async (mensaje,idFichaTecnica) => {
+    console.log('hola??');
     //mensaje
     // console.log("en guardarCotizacion el id es", idFichaTecnica);
     // console.log(mensaje, idFichaTecnica);
@@ -866,13 +871,13 @@ function VerFichasTecnicasIngeniero() {
         const datos = {
       idfichatecnica: idFichaTecnica,
       mensaje:mensaje,
-      idfichatecnica:fichaTecnica.idfichatecnica,
+      id_usuario:idUsuario,
     };
     try {
       const resultado = await clienteAxios.put(
         "/GuardarCotizacionIngeniero",
-        idFichaTecnica
-      );  pro
+        datos
+      );  
      /*  const resultado = await clienteAxios.put(
         "/detallefichatecnica",
         idFichaTecnica
@@ -917,10 +922,12 @@ function VerFichasTecnicasIngeniero() {
   }
 
   const GuardarAprobarCotizacion = async(mensaje,idFichaTecnica)=>{
+    
     const datos = {
+      id_usuario:idUsuario,
       idfichatecnica: idFichaTecnica,
       mensaje:mensaje,
-      idfichatecnica:fichaTecnica.idfichatecnica,
+      
     };
     try {
       const resultado = await clienteAxios.put(
@@ -1313,14 +1320,8 @@ function VerFichasTecnicasIngeniero() {
                     {/*   FIN DESCUENTO SUBPARTIDA */}
                     <div className="row mb-3">
                       <div className="col-12 col-sm-2 my-1">
-                      <button
-                            className="btn btn-success btn btn-sm text-uppercase"
-                            onClick={() => EnviarguardadoCotizacion()}
-                          >
-                            <BsFillEmojiLaughingFill className="h3 m-0 p-0 pe-1" />
-                            Guardar cotizacion{" "}
-                          </button>
-                       {/*  {
+                   
+                        {
                           nombreRol =='Ingeniero' && envio_ingeniero_fichatecnica=='0' &&
                           (
                             <button
@@ -1341,15 +1342,16 @@ function VerFichasTecnicasIngeniero() {
                      
                       </div>
                       <div className="col-12 col-sm-2 my-1">
+                   
                       {
-                          nombreRol =='Gerente de Proyecto' && envio_ingeniero_fichatecnica=='1' &&
+                          nombreRol =='Gerente de Proyecto' &&
                             (
                               <button className="btn btn-warning text-uppercase" onClick={()=>aprobarCotizacion()}>
                               aprobar cotizacion
                             </button>
                             )
                         }
-                        {
+                     {/*    {
                           nombreRol =='Gerente de Proyecto' && envio_ingeniero_fichatecnica=='0' &&
                             (
                               <span></span>

@@ -1,6 +1,6 @@
 import React, { useState,useContext } from 'react'
 import { Accordion, Card } from "react-bootstrap";
-import { peticionObtenerArchivos } from '../services/apisDescargaDeArchivos'
+import { peticionObtenerArchivos2 } from '../services/apisDescargaDeArchivos'
 import { MdPageview } from "react-icons/md";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect } from "react";
@@ -66,7 +66,7 @@ function VerDescargaDeArchivos() {
   const obtenerArchivos = async (idficha) => {
    // console.log("idusuario", usuario.idUsuario, "idficha", params.id);
     try {
-      const archivosTemporales = await peticionObtenerArchivos(
+      const archivosTemporales = await peticionObtenerArchivos2(
         usuario.idUsuario,
         idficha
       );

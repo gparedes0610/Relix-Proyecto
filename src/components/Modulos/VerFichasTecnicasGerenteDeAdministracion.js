@@ -26,19 +26,24 @@ function VerFichasTecnicasGerenteDeAdministracion() {
   const [detalleTabla, setDetalleTabla] = useState([]);
   const [detalleGeneral, setDetalleGeneral] = useState([]);
   const [detalleModulos, setDetalleModulos] = useState([]);
+  const [cargando, setCargando] = useState(false)
   /////////////////////////////////////////////////////////////////////////CONSUMO DE APIS
   const obtenerFichasAceptadasGa = async () => {
     try {
+      setCargando(true)
       const { data } = await clienteAxios.get("/api/FichaTecnicaCotizadas");
       console.log("obtenerFichasAceptadas", data);
       setFichasTecnicasGerenteAdministracion(data);
+      setCargando(false)
       //idFichatecnica
       return data;
     } catch (error) {
       console.log(error);
+      setCargando(false)
     }
   };
   useEffect(() => {
+    setCargando(true)
     setTimeout(() => {
       obtenerFichasAceptadasGa();
     }, 2500);
@@ -371,7 +376,9 @@ function VerFichasTecnicasGerenteDeAdministracion() {
         Ver Fichas Técnicas - Gerente Administración
         </h4>
       </div>
-      <div className="row">
+     {
+      cargando ? <p className="text-uppercase">Cargando....</p>:(
+        <div className="row">
         <Accordion defaultActiveKey="0" className="mb-4">
           <Accordion.Item eventKey="0">
             <Accordion.Header>Fichas tecnicas</Accordion.Header>
@@ -460,6 +467,8 @@ function VerFichasTecnicasGerenteDeAdministracion() {
           </Accordion.Item>
         </Accordion>
       </div>
+      )
+     }
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12 mb-3">
           {!mostarFicha ? (
@@ -537,7 +546,6 @@ function VerFichasTecnicasGerenteDeAdministracion() {
                       <div className="col-12 col-sm-2 text-start">
                         <Link
                           className="btn btn-warning btn btn-sm text-uppercase"
-                          //to={'/ver-fichas-tecnicas-gerente-general/descarga-de-archivos'}
                           to={`/ver-fichas-tecnicas-gerente-administacion/${fichaTecnica.idFichatecnica}`}
                         >
                           <FcDownload className="h3 m-0 p-0 pe-1" /> 
@@ -550,12 +558,21 @@ function VerFichasTecnicasGerenteDeAdministracion() {
                 ) : (
                   <div className="col-12 col-sm-4 text-start mb-3">
                     <button
-                      className="btn btn-warning btn btn-sm text-uppercase"
+                      className="btn btn-warning btn btn-sm text-uppercase me-2"
                       onClick={() => abrirModal()}
                     >
                       <BsNewspaper className="h3 m-0 p-0 pe-1" /> Detalle
                       general
                     </button>
+                    <Link
+                          className="btn btn-warning btn btn-sm text-uppercase"
+                          to={`/ver-fichas-tecnicas-gerente-administacion/${fichaTecnica.idFichatecnica}`}
+                        >
+                          <FcDownload className="h3 m-0 p-0 pe-1" /> 
+                          Descarga de archivos
+                        </Link>
+
+
                   </div>
                 )}
 

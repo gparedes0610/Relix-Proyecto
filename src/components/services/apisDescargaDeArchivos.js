@@ -67,7 +67,17 @@ const peticionEliminarArchivos = async (datos) => {
 
   const peticionObtenerArchivos = async (idusuario,idficha) => {
     try {
-      const { data } = await clienteAxios.get(`api/ListarArchivoUsuario/${idusuario}/${idficha}`);
+      const { data } = await clienteAxios.get(`api/ListarArchivoUsuario/${idusuario}/${idficha}/2`);
+   //   console.log("peticionObtenerArchivos", data);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const peticionObtenerArchivos2 = async (idusuario,idficha) => {
+    try {
+      const { data } = await clienteAxios.get(`api/ListarArchivoUsuario/${idusuario}/${idficha}/1`);
    //   console.log("peticionObtenerArchivos", data);
       return data;
     } catch (error) {
@@ -81,5 +91,6 @@ const peticionEliminarArchivos = async (datos) => {
     cargarArchivo,
     peticionObtenerArchivos,
     peticionAsignarArchivos,
-    peticionEliminarArchivos
+    peticionEliminarArchivos,
+    peticionObtenerArchivos2
   };

@@ -1,10 +1,10 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext,useRef  } from "react";
 import {
   cargarArchivo,
-  peticionObtenerArchivos,
   peticionAsignarArchivos,
-  peticionEliminarArchivos
+  peticionEliminarArchivos,
+  peticionObtenerArchivos
 } from "../services/apisDescargaDeArchivos";
 import { Link, useParams } from "react-router-dom";
 import authContext from "../../context/autenticacion/authContext";
@@ -29,6 +29,7 @@ function ModuloDescargaDeArchivos() {
   const params = useParams();
   //console.log('este es el id de la ficha',params.id)
   /////////////////////////////
+  const [cargando, setCargando] = useState(false)
   const [todosLosUsuarios, setTodosLosUsuarios] = useState([]);
   const peticionMostrarUsuarios = async () => {
     try {
@@ -70,7 +71,7 @@ function ModuloDescargaDeArchivos() {
   }, []);
 
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const inputFileRef = useRef(null);
   const handleFileInputChange = (e) => {
     //console.log(e.target.files[0])
     setSelectedFile(e.target.files[0]);
@@ -78,6 +79,7 @@ function ModuloDescargaDeArchivos() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setCargando(true)
     const formData = new FormData();
     formData.append("userfile", selectedFile);
     formData.append("idficha", params.id);
@@ -85,8 +87,12 @@ function ModuloDescargaDeArchivos() {
     try {
       await cargarArchivo(formData);
       await obtenerArchivos()
+      setSelectedFile(null) 
+      inputFileRef.current.value = "";
+      setCargando(false)
     } catch (error) {
       console.log("ver error =>", error);
+      setCargando(false)
     }
   };
 
@@ -246,6 +252,7 @@ function ModuloDescargaDeArchivos() {
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <input
+               ref={inputFileRef}
                 className="form-control"
                 type="file"
                 id="formFile"
@@ -258,7 +265,7 @@ function ModuloDescargaDeArchivos() {
           </form>
         </div>
       </div>
-      <div className="row">
+     {cargando  ? <p className="text-uppercase">Cargando....</p> :  <div className="row">
         <div className="col-12">
             
           <div
@@ -268,7 +275,7 @@ function ModuloDescargaDeArchivos() {
               overflow: "auto",
             }}
           >
-            {archivos.length >= 0 && (
+            {archivos.length > 0 ? (
               <DataGrid
                 columns={columns}
                 rows={rows}
@@ -278,10 +285,10 @@ function ModuloDescargaDeArchivos() {
                 //checkboxSelection
                 // disableSelectionOnClick
               />
-            )}
+            ): <p className="text-uppercase">No hay archivos</p>}
           </div>
         </div>
-      </div>
+      </div>}
       <div className="row">
         <div className="col-12">
         </div>
