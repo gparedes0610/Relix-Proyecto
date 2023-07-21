@@ -11,12 +11,21 @@ import {
   peticionObtenerSubPartidasProducto,
 } from "../services/apisBackOffice";
 
-function ModalAgregarProductoIngeniero({ detalleModulos, fichaTecnica ,obtenerDetalleTecnicasIngeniero}) {
+function ModalAgregarProductoIngeniero({
+  detalleModulos,
+  detalleTabla,
+  fichaTecnica,
+  obtenerDetalleTecnicasIngeniero,
+}) {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setShow(true);
+    const variable = detalleTabla.length +1; 
+    setInputValue(variable);
+  };
 
   //agregar producto manualmente
   const [registrarProducto, setRegistrarProducto] = useState({
@@ -67,32 +76,32 @@ function ModalAgregarProductoIngeniero({ detalleModulos, fichaTecnica ,obtenerDe
   //consumo de apis
 
   const [subpartidasProducto, setSubPartidasProducto] = useState(null);
-const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
+  const [codPartidaObtenido, setCodPartidaObtenido] = useState(null);
   const setAgarrarPartida = async (event) => {
-   // console.log('valor en obtener partida =>',valor )
+    // console.log('valor en obtener partida =>',valor )
     const selectedOption = event.target.selectedOptions[0];
     const value1 = selectedOption.value;
-    const value2 = selectedOption.getAttribute('data-valor');
+    const value2 = selectedOption.getAttribute("data-valor");
     console.log(value1, value2);
     try {
       setLoading(true);
       const result = await peticionObtenerSubPartidasProducto(value1);
       setLoading(false);
       setSubPartidasProducto(result);
-      setCodPartidaObtenido(value2)
+      setCodPartidaObtenido(value2);
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
-  const [codSubPartidaObtenido, setCodSubPartidaObtenido] = useState(null)
-  const obtenerCodSubPartida =(event)=>{
+  const [codSubPartidaObtenido, setCodSubPartidaObtenido] = useState(null);
+  const obtenerCodSubPartida = (event) => {
     const selectedOption = event.target.selectedOptions[0];
     const value1 = selectedOption.value;
-    const value2 = selectedOption.getAttribute('data-valor');
+    const value2 = selectedOption.getAttribute("data-valor");
     console.log(value1, value2);
-    setCodSubPartidaObtenido(value2)
-  }
+    setCodSubPartidaObtenido(value2);
+  };
 
   //obtener partidas
   const [partidasProducto, setPartidasProducto] = useState(null);
@@ -125,27 +134,36 @@ const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
       console.log(error);
     }
   };
+  //
+  const [inputValue, setInputValue] = useState(0);
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+  //
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    /* try {
+    try {
       if (productoPorBusqueda) {
         if (
           productoPorBusqueda.codigosoftcomProducto == "9999999999" ||
           productoPorBusqueda.codigosoftcomProducto == "0170020200"
         ) {
+          console.log("existe condicional");
           const data = {
             ...registrarProducto,
-            subPartida:codSubPartidaObtenido,
-            idPartida:codPartidaObtenido,
+            numPartida: detalleTabla.length + 1,
+            subPartida: codSubPartidaObtenido,
+            idPartida: codPartidaObtenido,
             descripcion: productoPorBusqueda.descripcionProducto,
             costoDiseno: productoPorBusqueda.costodisenoProducto,
             idFichatecnica: fichaTecnica.idFichatecnica,
           };
           console.log("esta data final  9999 ===>", data);
           await peticionAgregarProductoModuloIngeniero(data);
-           obtenerDetalleTecnicasIngeniero(fichaTecnica.idFichatecnica);
-          //obtenerDetalleTecnicasIngeniero
+          await obtenerDetalleTecnicasIngeniero(fichaTecnica.idFichatecnica);
+
           setRegistrarProducto({
             numPartida: "",
             idPartida: "",
@@ -164,19 +182,52 @@ const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
           setProductoPorBusqueda(null);
 
           handleClose();
+        } else {
+          console.log("No existe condicional");
+          const data = {
+            ...registrarProducto,
+            numPartida: detalleTabla.length + 1,
+            subPartida: codSubPartidaObtenido,
+            idPartida: codPartidaObtenido,
+            costoDiseno: productoPorBusqueda.costodisenoProducto,
+            idFichatecnica: fichaTecnica.idFichatecnica,
+          };
+          console.log("esta data final ===>", data);
+
+          await peticionAgregarProductoModuloIngeniero(data);
+          await obtenerDetalleTecnicasIngeniero(fichaTecnica.idFichatecnica);
+
+          setRegistrarProducto({
+            numPartida: "",
+            idPartida: "",
+            subPartida: "",
+            marca: "",
+            codProveedor: "",
+            codErp: "",
+            descripcion: "",
+            cantTotal: "",
+            precioUnitario: "",
+            costoDiseno: "",
+            descuento: "",
+            observacion: "",
+            modulo: "",
+          });
+          setProductoPorBusqueda(null);
+          handleClose();
+
           return;
         }
       } else {
+        console.log("no aplico busqueda");
         const data = {
           ...registrarProducto,
-          subPartida:codSubPartidaObtenido,
-          idPartida:codPartidaObtenido,
-            idFichatecnica: fichaTecnica.idFichatecnica,
+          numPartida: inputValue,
+          idFichatecnica: fichaTecnica.idFichatecnica,
         };
-        console.log("esta data final ===>", data);
+        console.log("ver data ->", data);
 
         await peticionAgregarProductoModuloIngeniero(data);
-          obtenerDetalleTecnicasIngeniero(fichaTecnica.idFichatecnica);
+        await obtenerDetalleTecnicasIngeniero(fichaTecnica.idFichatecnica);
 
         setRegistrarProducto({
           numPartida: "",
@@ -195,80 +246,7 @@ const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
         });
         setProductoPorBusqueda(null);
         handleClose();
-
-        return;
-      } */
-
-      try {
-        if (
-          productoPorBusqueda.codigosoftcomProducto == "9999999999" ||
-          productoPorBusqueda.codigosoftcomProducto == "0170020200"
-        ){
-          console.log('existe condicional');
-          const data = {
-            ...registrarProducto,
-            subPartida:codSubPartidaObtenido,
-            idPartida:codPartidaObtenido,
-            descripcion: productoPorBusqueda.descripcionProducto,
-            costoDiseno: productoPorBusqueda.costodisenoProducto,
-            idFichatecnica: fichaTecnica.idFichatecnica,
-          };
-          console.log("esta data final  9999 ===>", data);
-          await peticionAgregarProductoModuloIngeniero(data);
-          await obtenerDetalleTecnicasIngeniero(fichaTecnica.idFichatecnica);
-  
-          setRegistrarProducto({
-            numPartida: "",
-            idPartida: "",
-            subPartida: "",
-            marca: "",
-            codProveedor: "",
-            codErp: "",
-            descripcion: "",
-            cantTotal: "",
-            precioUnitario: "",
-            costoDiseno: "",
-            descuento: "",
-            observacion: "",
-            modulo: "",
-          });
-          setProductoPorBusqueda(null);
-  
-          handleClose();
-        }else{
-          console.log('No existe condicional');
-          const data = {
-            ...registrarProducto,
-            subPartida:codSubPartidaObtenido,
-            idPartida:codPartidaObtenido,
-            costoDiseno: productoPorBusqueda.costodisenoProducto,
-            idFichatecnica: fichaTecnica.idFichatecnica,
-          };
-          console.log("esta data final ===>", data);
-  
-          await peticionAgregarProductoModuloIngeniero(data);
-          await obtenerDetalleTecnicasIngeniero(fichaTecnica.idFichatecnica);
-  
-          setRegistrarProducto({
-            numPartida: "",
-            idPartida: "",
-            subPartida: "",
-            marca: "",
-            codProveedor: "",
-            codErp: "",
-            descripcion: "",
-            cantTotal: "",
-            precioUnitario: "",
-            costoDiseno: "",
-            descuento: "",
-            observacion: "",
-            modulo: "",
-          });
-          setProductoPorBusqueda(null);
-          handleClose();
-  
-          return;
-        } 
+      }
     } catch (error) {
       console.log(error);
     }
@@ -294,9 +272,11 @@ const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
                   <Form.Control
                     type="number"
                     placeholder="Ingrese numero de item:"
-                    name="numPartida"
-                    value={numPartida}
-                    onChange={(e) => actualizarInput(e)}
+                    /*   name="numPartida"
+                    value={detalleTabla.length +1}
+                    onChange={(e) => actualizarInput(e)} */
+                    value={inputValue}
+                    onChange={(e) => handleInputChange(e)}
                     required
                   />
                 </Form.Group>
@@ -314,13 +294,17 @@ const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
                     required
                   >
                     <option disabled>Seleccione una partida</option>
-                    {!partidasProducto ? (  
+                    {!partidasProducto ? (
                       <Cargando></Cargando>
                     ) : (
                       partidasProducto.map((partida, i) => (
-                        <option value={partida.idPartida} data-valor={partida.codPartida} key={i}>
-                        {partida.nombrePartida}
-                      </option>
+                        <option
+                          value={partida.idPartida}
+                          data-valor={partida.codPartida}
+                          key={i}
+                        >
+                          {partida.nombrePartida}
+                        </option>
                       ))
                     )}
                   </Form.Select>
@@ -336,7 +320,7 @@ const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
                     name="subPartida"
                     value={subPartida}
                     onChange={(e) => {
-                     obtenerCodSubPartida(e);
+                      obtenerCodSubPartida(e);
                       actualizarInput(e);
                     }}
                     required
@@ -354,9 +338,11 @@ const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
                           Seleccione una Subpartida
                         </option>
                         {subpartidasProducto.map((subpartida, i) => (
-                          <option value={subpartida.nombreSubPartida} 
-                          data-valor={subpartida.codSubPartida}
-                          key={i}>
+                          <option
+                            value={subpartida.nombreSubPartida}
+                            data-valor={subpartida.codSubPartida}
+                            key={i}
+                          >
                             {subpartida.nombreSubPartida}
                           </option>
                         ))}
@@ -705,7 +691,7 @@ const [codPartidaObtenido, setCodPartidaObtenido] = useState(null)
                   />
                 </Form.Group>
 
-               {/*  <Form.Group className="mb-3" controlId="formBasicText">
+                {/*  <Form.Group className="mb-3" controlId="formBasicText">
                   <Form.Label className="text-uppercase">
                     Observacion:
                   </Form.Label>

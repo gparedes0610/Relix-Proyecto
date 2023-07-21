@@ -150,6 +150,7 @@ const registrarRqPedido = async (datos) => {
       });
     }
   };
+
   const descargarExcelAlRegistrar = async (codigorequerimiento) => {
     console.log("codigorequerimiento", codigorequerimiento);
     console.log("entraste a reportePresupuesto");
@@ -186,13 +187,47 @@ const registrarRqPedido = async (datos) => {
     }
   };
 
-  const descargarExcelMaterialesProcesos= async (id) => {
-    console.log("id", id);
+  const descargarExcelGuiaValorizada = async (codigorequerimiento) => {
+    console.log("codigorequerimiento", codigorequerimiento);
     console.log("entraste a reportePresupuesto");
     const fecha = new Date();
     const hoy = fecha.getDate();
     const mesActual = fecha.getMonth() + 1;
     const anoActual = fecha.getFullYear();
+    try {
+      var config = {
+        responseType: "arraybuffer",
+      };
+      const resultado = await clienteAxios.get(
+        `/api/exportarPlantillaCargaPedido/${codigorequerimiento}`,
+        config
+      );
+      console.log("respuesta de descargarExcel", resultado.data);
+
+      const url = URL.createObjectURL(
+        new Blob([resultado.data], {
+          type: "application/vnd.ms-excel",
+        })
+      );
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `CargaDePedido ${hoy}_${mesActual}_${anoActual}.xlsx`
+      );
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.log(error.response.data.messages.error);
+    }
+  };
+
+
+  const descargarExcelMaterialesProcesos= async (id,fichaTecnica) => {
+    console.log("id", id);
+    console.log("entraste a reportePresupuesto");
+    const fecha = new Date();
     try {
       var config = {
         responseType: "arraybuffer",
@@ -212,7 +247,7 @@ const registrarRqPedido = async (datos) => {
       link.href = url;
       link.setAttribute(
         "download",
-        `Materiales-procesados-y-pendientes${hoy}_${mesActual}_${anoActual}.xlsx`
+        `R3_${fichaTecnica.nombreFichatecnica}-${fichaTecnica.numFichatecnica}.xlsx`
       );
       document.body.appendChild(link);
       link.click();
@@ -235,4 +270,5 @@ export {
   descargarExcelMaterialesProcesos,
   peticionObtenerProductosNoGlobales,
   peticionAgregarProductoModuloIngeniero,
+  descargarExcelGuiaValorizada
 };

@@ -14,7 +14,7 @@ const peticionObtenerRqPedidos= async () => {
 const peticionObtenerListadoDeRq= async (id) => {
     try {
       const { data } = await clienteAxios.get(`/api/ListarCodigosRequerimientoPedido/${id}`);
-      console.log("peticionObtenerListadoDeRq", data);
+     // console.log("peticionObtenerListadoDeRq", data);
       return data;
     } catch (error) {
       console.log(error);

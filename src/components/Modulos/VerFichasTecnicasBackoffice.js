@@ -82,13 +82,13 @@ function VerFichasTecnicasBackoffice() {
   };
   //obtener valores en la Tabla para backofiice
   const obtenerDatosTablaReporte = async (id) => {
-    console.log("entraste a obtenerDatosTablaReporte =>", id);
+    //console.log("entraste a obtenerDatosTablaReporte =>", id);
     try {
       //setLoading(true);
       const resultado = await clienteAxios.get(
         `/api/listarDetalleBackOffice/${id}`
       );
-      console.log("VER RESULTADO ===>", resultado);
+    //  console.log("VER RESULTADO ===>", resultado);
       setDataTablaBackoffice(resultado.data);
       setDetalleTabla(resultado.data.DetalleTabla);
       setDetalleGeneral(resultado.data.DetalleGeneral);
@@ -102,12 +102,15 @@ function VerFichasTecnicasBackoffice() {
   };
   ////////////////////////////////////////////////////////////////////EFECTS
   useEffect(() => {
-    obtenerFichasAceptadas();
+    setTimeout(() => {
+      obtenerFichasAceptadas();
+    }, 3000);
+   
   }, []);
 
   /////////////////////////////////////////////////descuento por modulo
   const btnVerTabla = async (ficha) => {
-    console.log("haber la ficha", ficha, "id", ficha.idFichatecnica);
+   // console.log("haber la ficha", ficha, "id", ficha.idFichatecnica);
     setFichaTecnica(ficha);
     obtenerDatosTablaReporte(ficha.idFichatecnica);
     setMostarFicha(true);
@@ -123,7 +126,7 @@ function VerFichasTecnicasBackoffice() {
   };
 
   const pintarCard = (indice) => {
-    console.log("indice", indice);
+   // console.log("indice", indice);
     let lista = document.querySelectorAll(".cambiarcolores");
     lista.forEach((item, i) => {
       if (i === indice) {
@@ -782,7 +785,6 @@ function VerFichasTecnicasBackoffice() {
     cantTotal,
     precioUnitario,
     costoDiseno,
-    descuento,
     observacion,
     modulo,
   } = registrarProducto;
@@ -810,89 +812,31 @@ function VerFichasTecnicasBackoffice() {
 
   const btnAgregarProducto = () => {
     setShowModalProducto(true);
+   // console.log('ver detalleTabla.length =>',detalleTabla.length);
+   const variable = detalleTabla.length +1
+    setInputValue(variable)
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-console.log('entro a agregar producto');
-console.log('productoPorBusqueda',productoPorBusqueda);
-console.log('productoPorBusqueda.codigosoftcomProducto',productoPorBusqueda.codigosoftcomProducto);
+    /* console.log("entro a agregar producto");
+    console.log("productoPorBusqueda", productoPorBusqueda);
+    console.log(
+      "productoPorBusqueda.codigosoftcomProducto",
+      productoPorBusqueda.codigosoftcomProducto
+    ); */
+/*    */
+
     try {
-      if (
-        productoPorBusqueda.codigosoftcomProducto == "9999999999" ||
-        productoPorBusqueda.codigosoftcomProducto == "0170020200"
-      ){
-        console.log('existe condicional');
-        const data = {
-          ...registrarProducto,
-          descripcion: productoPorBusqueda.descripcionProducto,
-          costoDiseno: productoPorBusqueda.costodisenoProducto,
-          idFichatecnica: fichaTecnica.idFichatecnica,
-        };
-        console.log("esta data final  9999 ===>", data);
-        await peticionAgregarProducto(data);
-        obtenerDatosTablaReporte(fichaTecnica.idFichatecnica);
-
-        setRegistrarProducto({
-          numPartida: "",
-          idPartida: "",
-          subPartida: "",
-          marca: "",
-          codProveedor: "",
-          codErp: "",
-          descripcion: "",
-          cantTotal: "",
-          precioUnitario: "",
-          costoDiseno: "",
-          descuento: "",
-          observacion: "",
-          modulo: "",
-        });
-        setProductoPorBusqueda(null);
-
-        handleCloseProducto();
-      }else{
-        console.log('No existe condicional');
-        const data = {
-          ...registrarProducto,
-          costoDiseno: productoPorBusqueda.costodisenoProducto,
-          idFichatecnica: fichaTecnica.idFichatecnica,
-        };
-        console.log("esta data final ===>", data);
-
-        await peticionAgregarProducto(data);
-        obtenerDatosTablaReporte(fichaTecnica.idFichatecnica);
-
-        setRegistrarProducto({
-          numPartida: "",
-          idPartida: "",
-          subPartida: "",
-          marca: "",
-          codProveedor: "",
-          codErp: "",
-          descripcion: "",
-          cantTotal: "",
-          precioUnitario: "",
-          costoDiseno: "",
-          descuento: "",
-          observacion: "",
-          modulo: "",
-        });
-        setProductoPorBusqueda(null);
-        handleCloseProducto();
-
-        return;
-      } 
-   
-     /*  if (productoPorBusqueda) {
-        console.log('existe productoPorBusqueda');
-        console.log('productoPorBusqueda.codigosoftcomProducto =>',productoPorBusqueda.codigosoftcomProducto);
+      if(productoPorBusqueda){
         if (
           productoPorBusqueda.codigosoftcomProducto == "9999999999" ||
           productoPorBusqueda.codigosoftcomProducto == "0170020200"
         ) {
+          console.log("existe condicional");
           const data = {
             ...registrarProducto,
+            numPartida: inputValue,
             descripcion: productoPorBusqueda.descripcionProducto,
             costoDiseno: productoPorBusqueda.costodisenoProducto,
             idFichatecnica: fichaTecnica.idFichatecnica,
@@ -900,7 +844,7 @@ console.log('productoPorBusqueda.codigosoftcomProducto',productoPorBusqueda.codi
           console.log("esta data final  9999 ===>", data);
           await peticionAgregarProducto(data);
           obtenerDatosTablaReporte(fichaTecnica.idFichatecnica);
-
+  
           setRegistrarProducto({
             numPartida: "",
             idPartida: "",
@@ -917,18 +861,51 @@ console.log('productoPorBusqueda.codigosoftcomProducto',productoPorBusqueda.codi
             modulo: "",
           });
           setProductoPorBusqueda(null);
-
+  
           handleCloseProducto();
+        } else {
+          console.log("No existe condicional");
+          const data = {
+            ...registrarProducto,
+            numPartida: inputValue,
+            costoDiseno: productoPorBusqueda.costodisenoProducto,
+            idFichatecnica: fichaTecnica.idFichatecnica,
+          };
+          console.log("esta data final ===>", data);
+  
+          await peticionAgregarProducto(data);
+          obtenerDatosTablaReporte(fichaTecnica.idFichatecnica);
+  
+          setRegistrarProducto({
+            numPartida: "",
+            idPartida: "",
+            subPartida: "",
+            marca: "",
+            codProveedor: "",
+            codErp: "",
+            descripcion: "",
+            cantTotal: "",
+            precioUnitario: "",
+            costoDiseno: "",
+            descuento: "",
+            observacion: "",
+            modulo: "",
+          });
+          setProductoPorBusqueda(null);
+          handleCloseProducto();
+  
+          return;
         }
-      } else {
-        console.log('NO existe productoPorBusqueda');
+      }else{
+        console.log('no aplico busqueda');
         const data = {
           ...registrarProducto,
+          numPartida: inputValue,
           idFichatecnica: fichaTecnica.idFichatecnica,
         };
-        console.log("esta data final ===>", data);
-
+        console.log('ver data ->',data); 
         await peticionAgregarProducto(data);
+        
         obtenerDatosTablaReporte(fichaTecnica.idFichatecnica);
 
         setRegistrarProducto({
@@ -948,16 +925,15 @@ console.log('productoPorBusqueda.codigosoftcomProducto',productoPorBusqueda.codi
         });
         setProductoPorBusqueda(null);
         handleCloseProducto();
-
-        return;
-      } */
+      }
+      
 
     } catch (error) {
       console.log(error);
     }
+
+
   };
-
-
 
   //obtener subPartidas
   const [subpartidasProducto, setSubPartidasProducto] = useState(null);
@@ -1006,7 +982,7 @@ console.log('productoPorBusqueda.codigosoftcomProducto',productoPorBusqueda.codi
   const obteniendoEstados = async () => {
     try {
       const result = await peticionObtenerEstadosProducto();
-      console.log(result);
+    //  console.log(result);
       setEstados(result);
     } catch (error) {
       console.log(error);
@@ -1037,7 +1013,7 @@ console.log('productoPorBusqueda.codigosoftcomProducto',productoPorBusqueda.codi
 
   const reporteMaterialesProcesos = async () => {
     try {
-      await descargarExcelMaterialesProcesos(fichaTecnica.idFichatecnica);
+      await descargarExcelMaterialesProcesos(fichaTecnica.idFichatecnica,fichaTecnica);
     } catch (error) {
       console.log(error);
     }
@@ -1106,6 +1082,12 @@ console.log('productoPorBusqueda.codigosoftcomProducto',productoPorBusqueda.codi
     setActivarBtnRqPedido(false);
     // return fila.nombreEstado =='Anulado' ? true : false;
   };
+  //
+  const [inputValue, setInputValue] = useState(0);
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+  //
 
   return (
     <div className="container-fluid pt-4 ">
@@ -1134,7 +1116,6 @@ console.log('productoPorBusqueda.codigosoftcomProducto',productoPorBusqueda.codi
                       <Card className="cambiarcolores">
                         <Card.Body>
                           <Card.Title className="text-uppercase">
-                            {" "}
                             <span>{fichaTecnica.nombreFichatecnica}</span>-{" "}
                             {fichaTecnica.numFichatecnica}
                           </Card.Title>
@@ -1650,17 +1631,20 @@ console.log('productoPorBusqueda.codigosoftcomProducto',productoPorBusqueda.codi
         <Modal.Body>
           <Row>
             <Col lg={12}>
-              <Form onSubmit={handleSubmit} >
+              <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicText">
                   <Form.Label className="text-uppercase">
                     Numero de Item:
                   </Form.Label>
                   <Form.Control
-                    type="number"
+                    type="text"
                     placeholder="Ingrese numero de item:"
-                    name="numPartida"
-                    value={numPartida}
-                    onChange={(e) => actualizarInput(e)}
+                    /*   name="numPartida"
+                    value={detalleTabla.length + 1}
+                 //   value={numPartida}
+                    onChange={(e) => actualizarInput(e)} */
+                    value={inputValue}
+                    onChange={(e) => handleInputChange(e)}
                     required
                   />
                 </Form.Group>
@@ -1711,14 +1695,11 @@ console.log('productoPorBusqueda.codigosoftcomProducto',productoPorBusqueda.codi
                   >
                     <option>Seleccione una Sub-partida</option>
                     {subpartidasProducto &&
-                    (
                       subpartidasProducto.map((subpartida, i) => (
                         <option value={subpartida.nombreSubPartida} key={i}>
                           {subpartida.nombreSubPartida}
                         </option>
-                      ))
-                    )
-                      }
+                      ))}
                   </Form.Select>
                 </Form.Group>
 

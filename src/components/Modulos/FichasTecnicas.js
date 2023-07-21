@@ -10,10 +10,10 @@ function FichasTecnicas() {
   const obtenerTodasLasFichasTecnicas = async () => {
     try {
       const respuesta = await clienteAxios.get("/api/fichatecnica");
-      console.log("respuesta de obtenerTodasLasFichasTecnicas", respuesta.data);
+      //console.log("respuesta de obtenerTodasLasFichasTecnicas", respuesta.data);
       setTodasLasFichasTecnicas(respuesta.data);
     } catch (error) {
-      console.log(error.response.data.messages.error);
+    //  console.log(error.response.data.messages.error);
     }
   };
 
@@ -23,8 +23,9 @@ function FichasTecnicas() {
 
   const reportePresupuesto = async (cellValues) => {
     let chaparId = cellValues.row.idFichatecnica;
-    console.log("este es el id", chaparId);
-    console.log("entraste a reportePresupuesto");
+  /*   console.log('nombre archivo =>',cellValues.row.nombreFichatecnica,cellValues.row.numFichatecnica); */
+   // console.log("este es el id", chaparId);
+    //console.log("entraste a reportePresupuesto");
     const fecha = new Date();
     const hoy = fecha.getDate();
     const mesActual = fecha.getMonth() + 1;
@@ -49,7 +50,7 @@ function FichasTecnicas() {
       link.href = url;
       link.setAttribute(
         "download",
-        `reportePresupuesto ${hoy}_${mesActual}_${anoActual}.xlsx`
+        `R1_${cellValues.row.nombreFichatecnica}-${cellValues.row.numFichatecnica}.xlsx`
       );
       document.body.appendChild(link);
       link.click();
@@ -59,8 +60,8 @@ function FichasTecnicas() {
   };
   const reportePresupuestoPartida = async (cellValues) => {
     let chaparId = cellValues.row.idFichatecnica;
-    console.log("este es el id", chaparId);
-    console.log("entraste a reportePresupuestoPartida");
+   // console.log("este es el id", chaparId);
+    //console.log("entraste a reportePresupuestoPartida");
     const fecha = new Date();
     const hoy = fecha.getDate();
     const mesActual = fecha.getMonth() + 1;
@@ -85,7 +86,7 @@ function FichasTecnicas() {
       link.href = url;
       link.setAttribute(
         "download",
-        `reportePresupuesto ${hoy}_${mesActual}_${anoActual}.xlsx`
+        `R1_P_${cellValues.row.nombreFichatecnica}-${cellValues.row.numFichatecnica}.xlsx`
       );
       document.body.appendChild(link);
       link.click();
@@ -95,8 +96,8 @@ function FichasTecnicas() {
   };
   const reportePresupuestoSubPartida = async (cellValues) => {
     let chaparId = cellValues.row.idFichatecnica;
-    console.log("este es el id", chaparId);
-    console.log("entraste a reportePresupuestoPartida");
+  //  console.log("este es el id", chaparId);
+    //console.log("entraste a reportePresupuestoPartida");
     const fecha = new Date();
     const hoy = fecha.getDate();
     const mesActual = fecha.getMonth() + 1;
@@ -109,7 +110,7 @@ function FichasTecnicas() {
         `/ExcelReporteUnoSubPartida/${chaparId}`,
         config
       );
-      console.log("respuesta de reportePresupuesto", resultado.data);
+      //console.log("respuesta de reportePresupuesto", resultado.data);
 
       const url = URL.createObjectURL(
         new Blob([resultado.data], {
@@ -121,7 +122,7 @@ function FichasTecnicas() {
       link.href = url;
       link.setAttribute(
         "download",
-        `reportePresupuesto ${hoy}_${mesActual}_${anoActual}.xlsx`
+        `R1_S_${cellValues.row.nombreFichatecnica}-${cellValues.row.numFichatecnica}.xlsx`
       );
       document.body.appendChild(link);
       link.click();

@@ -88,6 +88,9 @@ function SideBarMenu({ activarSideBar, setActivarSideBar, usuario }) {
   const moduloGuias = rutas.filter(
     (item) => item.moduloGlobal == "MODULO GUIAS"
   );
+  const moduloDescargaArchivos = rutas.filter(
+    (item) => item.moduloGlobal == "MODULO GESTION DE DOCUMENTOS"
+  );
   return (
     <div className={!activarSideBar ? "nav" : "nav show-menu"}>
       <nav className="nav__container">
@@ -235,7 +238,8 @@ function SideBarMenu({ activarSideBar, setActivarSideBar, usuario }) {
                   </div>
                 </>
               )}
-              {moduloReporte.length > 0 && (
+              
+              {moduloGuias.length > 0 && (
                 <>
                   <div className="nav__dropdown">
                     <a href="#" className="nav__link">
@@ -265,6 +269,38 @@ function SideBarMenu({ activarSideBar, setActivarSideBar, usuario }) {
                   </div>
                 </>
               )}
+
+              {moduloDescargaArchivos.length > 0 && (
+                <>
+                  <div className="nav__dropdown">
+                    <a href="#" className="nav__link">
+                      <i className='bx bxs-download nav__icon'></i>
+                      <span className="nav__name">Modulo gestion de documentos</span>
+                      <i className="bx bxs-chevron-down nav__icon nav__dropdown-icon"></i>
+                    </a>
+
+                    <div className="nav__dropdown-collapse">
+                      <div className="nav__dropdown-content">
+                        {moduloDescargaArchivos.map((item, i) => (
+                          <Link
+                            to={`/${item.rutaModulo}`}
+                            className="nav_dropdown-item"
+                            key={i}
+                            onClick={() => {
+                              setActivarSideBar(!activarSideBar);
+                            }}
+                          >
+                            <span className="nav__name">
+                              {item.nombreModulo}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
             </div>
           </div>
         </div>

@@ -50,6 +50,7 @@ function ModalRegistrarRqPedido({ selectedRows, fichaTecnica,obtenerDatosTablaRe
   });
 
   const mostrarTabla = () => {
+    console.log('copiaFilas =>',copiaFilas);
     setCopiaDeFila(copiaFilas); //asignar la copia
   };
 
@@ -91,8 +92,6 @@ function ModalRegistrarRqPedido({ selectedRows, fichaTecnica,obtenerDatosTablaRe
 
       detalleReqPedido: copiaDeFilas,
     };
-    //falta acabar aqui es 
-
     console.log('data a enviarse ->',data);
 
     try {
@@ -114,7 +113,12 @@ function ModalRegistrarRqPedido({ selectedRows, fichaTecnica,obtenerDatosTablaRe
       setErrores([])
      
     } catch (error) {
-   
+     // console.log('error.response.data.messages.error',error.response.data.messages.error);
+     if(error.response.data.messages.error){
+      alert(error.response.data.messages.error)
+      return;
+     }
+      
       setErrores(error.response.data.messages)
       Swal.fire({
         icon: "error",
@@ -345,7 +349,7 @@ function ModalRegistrarRqPedido({ selectedRows, fichaTecnica,obtenerDatosTablaRe
               Mostrar tabla
             </button>
           ) : (
-            <div class="alert alert-danger mb-3" role="alert">
+            <div className="alert alert-danger mb-3" role="alert">
               No has seleccionado ningun fila ,por favor seleccione algunas
             </div>
           )}

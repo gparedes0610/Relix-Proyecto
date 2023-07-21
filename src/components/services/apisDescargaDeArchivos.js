@@ -65,6 +65,26 @@ const peticionEliminarArchivos = async (datos) => {
     }
   };
 
+const peticionBorrarArchivo = async (datos) => {
+  console.log('datos =>',datos)
+    try {
+      const { data } = await clienteAxios.put(
+        `/api/EliminarArchivo`,
+        datos
+      );
+      console.log("peticionBorrarArchivo", data);
+     // alert('Producto agregado')
+      return data;
+    } catch (error) {
+      console.log(error.response.data.messages.error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: `${error.response.data.messages.error}`,
+      });
+    }
+  };
+
   const peticionObtenerArchivos = async (idusuario,idficha) => {
     try {
       const { data } = await clienteAxios.get(`api/ListarArchivoUsuario/${idusuario}/${idficha}/2`);
@@ -92,5 +112,6 @@ const peticionEliminarArchivos = async (datos) => {
     peticionObtenerArchivos,
     peticionAsignarArchivos,
     peticionEliminarArchivos,
-    peticionObtenerArchivos2
+    peticionObtenerArchivos2,
+    peticionBorrarArchivo
   };

@@ -37,6 +37,7 @@ import VerDescargaDeArchivos from "./components/Modulos/VerDescargaDeArchivos";
 import OlvidastePassword from "./components/auth/OlvidastePassword";
 import RecuperarPassword from "./components/auth/RecuperarPassword";
 import RegistrarGuiasVsPedido from "./components/Modulos/RegistrarGuiasVsPedido";
+import GuiaValorizacion from "./components/Modulos/Modulo-Guias/GuiaValorizacion";
 
 
 
@@ -227,6 +228,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <Guias />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/guia-valorizacion"
+                element={
+                  <PrivateRoute>
+                    <GuiaValorizacion />
                   </PrivateRoute>
                 }
               />

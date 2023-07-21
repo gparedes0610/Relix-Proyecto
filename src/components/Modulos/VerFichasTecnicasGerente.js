@@ -628,10 +628,7 @@ function VerFichasTecnicasGerente() {
   const altaNegocio = async (idFicha, numero) => {
     console.log("esta es la data en altaNegocio ", idFicha, numero);
     try {
-      const resultado = await clienteAxios.put(
-        `/api/AprobacionGerenteGeneral/${idFicha}`,
-        numero
-      );
+    
       const accionUsuario = await Swal.fire({
         icon: "warning",
         title: "Esta apunto de confirmar alta de negocio",
@@ -640,6 +637,11 @@ function VerFichasTecnicasGerente() {
       });
 
       if (accionUsuario.isConfirmed) {
+        const resultado = await clienteAxios.put(
+          `/api/AprobacionGerenteGeneral/${idFicha}`,
+          numero
+        );
+        alert('Se confirma alta de negocio')
         console.log("resultado de altaNegocio", resultado);
         console.log("resultado de altaNegocio", resultado.data);
         await obtenerFichasAceptadas();

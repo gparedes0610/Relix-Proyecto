@@ -4,7 +4,8 @@ import {
   cargarArchivo,
   peticionAsignarArchivos,
   peticionEliminarArchivos,
-  peticionObtenerArchivos
+  peticionObtenerArchivos,
+  peticionBorrarArchivo
 } from "../services/apisDescargaDeArchivos";
 import { Link, useParams } from "react-router-dom";
 import authContext from "../../context/autenticacion/authContext";
@@ -20,7 +21,7 @@ import clienteAxios from "../../config/axios";
 import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ClearIcon from '@mui/icons-material/Clear';
-
+import Swal from "sweetalert2";
 function ModuloDescargaDeArchivos() {
   /////////////////////////////////
   const autentificaciones = useContext(authContext);
@@ -202,8 +203,57 @@ function ModuloDescargaDeArchivos() {
         );
       },
     }, 
+    
+     {
+      field: "Eliminar Archivo",
+      headerName: "Eliminar Archivo",
+      width: 200,
+      renderCell: (cellValues) => {
+        return (
+          <div>
+           <button className="btn btn-danger" onClick={()=>btnBorrarArchivo(cellValues.row)}>Eliminar</button>
+          </div>
+        );
+      },
+    }, 
 
   ];
+
+  const btnBorrarArchivo = async (data)=>{
+    console.log('borrado archivo',data);
+    const nuevaData ={
+      id : params.id,
+      nombreArchivo : data.NOMBRE_ALEATORIO_ARCHIVO
+    }
+   // console.log('se va enviar esto ->',nuevaData);
+   //ARCHIVO ELIMINADO EXITOSAMENTE
+    try {
+      Swal.fire({
+        title: 'Seguro que quieres borrar archivo?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        denyButtonText: `No`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+           peticionBorrarArchivo(nuevaData);
+          Swal.fire('Eliminado!', '', 'success')
+          const nuevosArchivos = archivos.filter((archivo)=>(
+            archivo.ID_ARCHIVO != data.ID_ARCHIVO
+          ))
+          console.log('nuevosArchivos =>',nuevosArchivos);
+          setArchivos(nuevosArchivos)
+
+        } else if (result.isDenied) {
+          Swal.fire('Archivo no borrado', '', 'info')
+        }
+      })
+    
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const asignarUsuario = async(idArchivo,valor) => {
     console.log('ver valor =>',valor)

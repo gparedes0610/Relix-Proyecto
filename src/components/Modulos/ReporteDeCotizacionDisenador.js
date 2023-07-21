@@ -8,10 +8,10 @@ function ReporteDeCotizacionDisenador() {
   const obtenerTodasLasFichasTecnicas = async () => {
     try {
       const respuesta = await clienteAxios.get("/api/fichatecnica");
-      console.log("respuesta de obtenerTodasLasFichasTecnicas", respuesta.data);
+   //   console.log("respuesta de obtenerTodasLasFichasTecnicas", respuesta.data);
       setTodasLasFichasTecnicas(respuesta.data);
     } catch (error) {
-      console.log(error.response.data.messages.error);
+     // console.log(error.response.data.messages.error);
     }
   };
 
@@ -47,7 +47,7 @@ function ReporteDeCotizacionDisenador() {
       link.href = url;
       link.setAttribute(
         "download",
-        `reporteAnalisis ${hoy}_${mesActual}_${anoActual}.xlsx`
+        `R2_${cellValues.row.nombreFichatecnica}-${cellValues.row.numFichatecnica}.xlsx`
       );
       document.body.appendChild(link);
       link.click();
@@ -130,7 +130,7 @@ function ReporteDeCotizacionDisenador() {
               rows={rows}
               pageSize={15}
               rowsPerPageOptions={[5]}
-              checkboxSelection
+             // checkboxSelection
               disableSelectionOnClick
             />
           </div>

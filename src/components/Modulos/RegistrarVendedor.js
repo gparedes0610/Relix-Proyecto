@@ -96,6 +96,7 @@ function RegistrarVendedor() {
         showConfirmButton: false,
         timer: 2700,
       });
+     await obtenerUsuariosConVendedores()
       return data;
     } catch (error) {
       console.log(error);

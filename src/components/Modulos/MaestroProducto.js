@@ -210,7 +210,7 @@ function MaestroProducto() {
                     Codigo Referencia:
                   </Form.Label>
                   <Form.Control
-                    type="number"
+                    type="text"
                     placeholder="Codigo Referencia"
                     name="codigoreferenciaProducto"
                     value={codigoreferenciaProducto}

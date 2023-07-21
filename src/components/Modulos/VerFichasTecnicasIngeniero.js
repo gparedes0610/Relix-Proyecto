@@ -847,7 +847,7 @@ function VerFichasTecnicasIngeniero() {
      Swal.fire({
     //  title: `"Solicitar a gerente de proyectos:"`,
       title: `${nombreRol =='Gerente de Proyecto' ? "Solicitar a gerencia general:":"Solicitar a gerente de proyectos:"}`,
-      html: `<input type="text" id="mensaje" class="swal2-input" placeholder="Mensaje">
+      html: `<input type="text" id="mensaje" className="swal2-input" placeholder="Mensaje">
     `,
       confirmButtonText: "Enviar mensaje",
       focusConfirm: false,
@@ -906,7 +906,7 @@ function VerFichasTecnicasIngeniero() {
   const aprobarCotizacion = ()=>{
     Swal.fire({
       title: "Solicitar a gerencia general:",
-      html: `<input type="text" id="mensaje" class="swal2-input" placeholder="Mensaje">
+      html: `<input type="text" id="mensaje" className="swal2-input" placeholder="Mensaje">
     `,
       confirmButtonText: "Enviar mensaje",
       focusConfirm: false,
@@ -922,7 +922,7 @@ function VerFichasTecnicasIngeniero() {
   }
 
   const GuardarAprobarCotizacion = async(mensaje,idFichaTecnica)=>{
-    
+    console.log('entras?');
     const datos = {
       id_usuario:idUsuario,
       idfichatecnica: idFichaTecnica,
@@ -1381,6 +1381,7 @@ function VerFichasTecnicasIngeniero() {
                       <div className="col-12 col-sm-2 my-1">
                         <ModalAgregarProductoIngeniero
                           detalleModulos={detalleModulos}
+                          detalleTabla={detalleTabla}
                           fichaTecnica={fichaTecnica}
                           obtenerDetalleTecnicasIngeniero={
                             obtenerDetalleTecnicasIngeniero

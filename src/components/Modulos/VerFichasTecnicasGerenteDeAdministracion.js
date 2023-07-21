@@ -318,10 +318,7 @@ function VerFichasTecnicasGerenteDeAdministracion() {
   const altaNegocioGerenteAdministracion = async (idFicha, numero) => {
     console.log("esta es la data en altaNegocio ", idFicha, numero);
     try {
-      const resultado = await clienteAxios.put(
-        `/api/AprobacionGerenteAdministracion/${idFicha}`,
-        numero
-      );
+     
       const accionUsuario = await Swal.fire({
         icon: "warning",
         title: "Esta apunto de confirmar alta de negocio",
@@ -330,6 +327,12 @@ function VerFichasTecnicasGerenteDeAdministracion() {
       });
 
       if (accionUsuario.isConfirmed) {
+        const resultado = await clienteAxios.put(
+          `/api/AprobacionGerenteAdministracion/${idFicha}`,
+          numero
+        );
+        ;
+        alert('Se confirma alta de negocio')
         console.log("resultado de altaNegocio", resultado);
         console.log("resultado de altaNegocio", resultado.data);
         await obtenerFichasAceptadasGa();
@@ -558,14 +561,14 @@ function VerFichasTecnicasGerenteDeAdministracion() {
                 ) : (
                   <div className="col-12 col-sm-4 text-start mb-3">
                     <button
-                      className="btn btn-warning btn btn-sm text-uppercase me-2"
+                      className="btn btn-warning btn btn-sm text-uppercase me-2 mt-1"
                       onClick={() => abrirModal()}
                     >
                       <BsNewspaper className="h3 m-0 p-0 pe-1" /> Detalle
                       general
                     </button>
                     <Link
-                          className="btn btn-warning btn btn-sm text-uppercase"
+                          className="btn btn-warning btn btn-sm text-uppercase mt-1"
                           to={`/ver-fichas-tecnicas-gerente-administacion/${fichaTecnica.idFichatecnica}`}
                         >
                           <FcDownload className="h3 m-0 p-0 pe-1" /> 

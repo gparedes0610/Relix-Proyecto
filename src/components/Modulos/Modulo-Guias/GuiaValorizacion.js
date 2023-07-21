@@ -1,26 +1,17 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import clienteAxios from "../../config/axios";
 import { DataGrid } from "@mui/x-data-grid";
 import { GiSaveArrow } from "react-icons/gi";
 
 import Card from "react-bootstrap/Card";
-import {
-  Accordion,
-  Button,
-  Col,
-  Form,
-  Modal,
-  Row,
-  Spinner,
-  Tab,
-  Tabs,
-} from "react-bootstrap";
+import { Accordion } from "react-bootstrap";
 import { MdPageview } from "react-icons/md";
 import { AiOutlineSave } from "react-icons/ai";
 import Box from "@mui/material/Box";
-import ModalGuiaValorizada from "../Modales/ModalGuiaValorizada";
-function Guias() {
+import ModalGuiaValorizada from "../../Modales/ModalGuiaValorizada";
+import clienteAxios from "../../../config/axios";
+
+function GuiaValorizacion() {
   ///////////////////////////////////////////////////////////////////////////HOOKS
   const [fichasTecnicasBackoffice, setFichasTecnicasBackoffice] = useState([]);
   const [fichaTecnica, setFichaTecnica] = useState({});
@@ -33,7 +24,7 @@ function Guias() {
   const obtenerFichasAceptadas = async () => {
     try {
       const { data } = await clienteAxios.get("/api/FichaTecnicaBackOffice");
-    //  console.log("obtenerFichasAceptadas", data);
+      //  console.log("obtenerFichasAceptadas", data);
       setFichasTecnicasBackoffice(data);
 
       return data;
@@ -52,7 +43,7 @@ function Guias() {
     try {
       //setLoading(true);
       const resultado = await clienteAxios.get(
-        `/api/ListarDetallePedidoGuiasTraslado/${id}`
+        `/api/GuiaTrasladoDetalle/${id}`
       );
       console.log("VER RESULTADO =>", resultado);
       setDataTablaBackoffice(resultado.data);
@@ -60,7 +51,7 @@ function Guias() {
       // setLoading(false);
     } catch (error) {
       console.log("hay un error");
-     // console.log(error.response.data.messages.error);
+      // console.log(error.response.data.messages.error);
     }
   };
 
@@ -90,98 +81,90 @@ function Guias() {
   const columns = [
     { field: "id", headerName: "ID", width: 90, hide: true },
     {
-      field: "CANTIDAD",
-      headerName: "Cantidad",
+      field: "NUMERO_ITEM_GUIA_TRASLADO_DETALLE",
+      headerName: "Nro Item",
       width: 100,
       //editable: true,
     },
-   /*  {
-      field: "CANTIDADTOTAL",
-      headerName: "Cantidad total",
+    {
+      field: "moduloPedido",
+      headerName: "Modulo",
       width: 150,
       //editable: true,
-    }, */
+    },
 
     {
-      field: "CODERP",
-      headerName: "CODERP",
-      width: 150,
-      //editable: true,
-    },
-    {
-      field: "CODGUIAS",
-      headerName: "CODGUIAS",
-      width: 150,
-      //editable: true,
-    },
-    {
-      field: "CODPED",
-      headerName: "CODPED",
-      width: 150,
-      //editable: true,
-    },
-    {
-      field: "CODPRO",
-      headerName: "CODPRO",
-      width: 150,
-      //editable: true,
-    },
-    {
-      field: "CODREQ",
-      headerName: "CODREQ",
-      width: 150,
-      //editable: true,
-    },
-    {
-      field: "DESCRIPCION",
-      headerName: "Descripcion",
-      width: 150,
-      //editable: true,
-    },
-    {
-      field: "ESTADOPROD",
-      headerName: "Estado Prod.",
-      width: 150,
-      //editable: true,
-    },
-    {
-      field: "ITEM",
-      headerName: "Item",
-      width: 150,
-      //editable: true,
-    },
-    {
-      field: "MARCA",
-      headerName: "Marca",
-      width: 150,
-      //editable: true,
-    },
-    {
-      field: "PARTIDA",
+      field: "PARTIDA_GUIA_TRASLADO_DETALLE",
       headerName: "Partida",
       width: 150,
       //editable: true,
     },
     {
-      field: "PRECTOTAL",
-      headerName: "Precio Total",
+      field: "SUBPARTIDA_GUIA_TRASLADO_DETALLE",
+      headerName: "Sub-Partida",
       width: 150,
       //editable: true,
     },
     {
-      field: "PRECUNIT",
+      field: "MARCA_GUIA_TRASLADO_DETALLE",
+      headerName: "Marca",
+      width: 150,
+      //editable: true,
+    },
+    {
+      field: "CODIGO_SOFTCOM_GUIA_TRASLADO_DETALLE",
+      headerName: "CodSoftcom",
+      width: 170,
+      //editable: true,
+    },
+    {
+      field: "CODIGO_PROVEEDOR_GUIA_TRASLADO_DETALLE",
+      headerName: "CodProveedor",
+      width: 170,
+      //editable: true,
+    },
+    {
+      field: "DESCRIPCION_GUIA_TRASLADO_DETALLE",
+      headerName: "Descripcion",
+      width: 150,
+      //editable: true,
+    },
+    {
+      field: "CANTIDAD_GUIA_TRASLADO_DETALLE",
+      headerName: "Cantidad",
+      width: 150,
+      //editable: true,
+    },
+    {
+      field: "PRECIO_UNIT_GUIA_TRASLADO_DETALLE",
       headerName: "Precio Unitario",
+      width: 180,
+      //editable: true,
+    },
+    {
+      field: "SUBTOTAL_GUIA_TRASLADO_DETALLE",
+      headerName: "Sub-Total",
       width: 150,
       //editable: true,
     },
     {
-      field: "SUBPARTIDA",
-      headerName: "SubPartida",
+      field: "CODIGO_REQUERIMIENTO_GUIA_TRASLADO_DETALLE",
+      headerName: "CodRequerimiento",
       width: 150,
       //editable: true,
     },
-
-
+    {
+      field: "CODIGO_PEDIDO_GUIA_TRASLADO_DETALLE",
+      headerName: "CodPedido",
+      width: 150,
+      //editable: true,
+    },
+    {
+      field: "CODIGO_GUIA_TRASLADO_DETALLE",
+      headerName: "CodGuia",
+      width: 150,
+      //editable: true,
+    },
   ];
 
   const rows = dataTablaBackoffice.map((dato, i) => ({
@@ -189,10 +172,10 @@ function Guias() {
     id: i + 1,
   }));
 
-  const descargarReporteMateriales =async (ficha)=>{
- //   console.log(ficha.idFichatecnica)
-let id = ficha.idFichatecnica
-    console.log("entraste a descargarReporteMateriales");
+  const descargarReporteValorizacion = async (ficha) => {
+    //   console.log(ficha.idFichatecnica)
+    let id = ficha.idFichatecnica;
+    console.log("entraste a descargarReporteValorizacion");
     const fecha = new Date();
     const hoy = fecha.getDate();
     const mesActual = fecha.getMonth() + 1;
@@ -202,12 +185,16 @@ let id = ficha.idFichatecnica
         responseType: "arraybuffer",
       };
       const resultado = await clienteAxios.get(
-        `/api/ExportarReporteMaterialesAtendidos/${id}`,config
+        `/api/GuiaTrasladoDetalle/ReporteValorizacion/${id}`,
+        config
       );
-      console.log("respuesta de descargarExcelMaterialesProcesos", resultado.data);
+      console.log(
+        "respuesta de descargarReporteValorizacion",
+        resultado.data
+      );
 
       const url = URL.createObjectURL(
-        new Blob([resultado.data], {  
+        new Blob([resultado.data], {
           type: "application/vnd.ms-excel",
         })
       );
@@ -216,20 +203,22 @@ let id = ficha.idFichatecnica
       link.href = url;
       link.setAttribute(
         "download",
-        `R4_${ficha.nombreFichatecnica}-${ficha.numFichatecnica}.xlsx`
+        `R6_${ficha.nombreFichatecnica}-${ficha.numFichatecnica}.xlsx`
       );
       document.body.appendChild(link);
       link.click();
     } catch (error) {
       console.log(error.response.data.messages.error);
     }
-  }
+  };
 
   const filaSeleccionada = (filas) => {
     console.log("funciona", filas);
-    /* if(fila.length>0){
-      console.log('funciona',fila)
-      const existeAnuladoO999 = 0;
+    /*  if(filas.length<4){
+      console.log('funciona',filas)
+    }else{
+      alert('no puede haber mas de 20 filas seleccionadas')
+      return;
     } */
     const verificar = filas.some((fila) => {
       return (
@@ -238,7 +227,7 @@ let id = ficha.idFichatecnica
         fila.codigosoftcomProducto == "9999999999"
       );
     });
-  //  console.log("verificar =>", verificar);
+    //  console.log("verificar =>", verificar);
     if (verificar) {
       setActivarBtn(true);
       alert(
@@ -253,7 +242,7 @@ let id = ficha.idFichatecnica
     <div className="container-fluid pt-4 ">
       <div className="my-4 text-center container ">
         <h4 className=" fw-bold border border-secondary rounded p-3 shadow mb-2 bg-body text-uppercase">
-          Guias
+          Guias Valorizadas
         </h4>
       </div>
       <div className="row">
@@ -318,24 +307,32 @@ let id = ficha.idFichatecnica
       {mostarFicha ? (
         dataTablaBackoffice.length >= 1 ? (
           <div className="row">
-          <div className='row'>
-        <div className="col-md-4">
-      {/*     conversar si se queda o no */}
-          <button className="btn btn-primary btn-sm mb-3 text-uppercase"
-          onClick={()=> descargarReporteMateriales(fichaTecnica)}
-          >Descargar reporte de materiales antendidos y pendiente</button>
-        </div>
-        {/* <div className="col-md-4">
-         <ModalGuiaValorizada
-          selectedRows={selectedRows}
-          fichaTecnica={fichaTecnica}
-          obtenerDatosTablaReporte={
-            obtenerDatosTablaReporte
-          }
-          btnVerTabla={btnVerTabla}
-         />
-        </div> */}
-          </div>
+            <div className="row">
+              <div className="col-md-4">
+                {/*     conversar si se queda o no */}
+                <button
+                  className="btn btn-primary btn-sm mb-3 text-uppercase"
+                  onClick={() => descargarReporteValorizacion(fichaTecnica)}
+                >
+                  Descargar reporte de valorizacion
+                </button>
+              </div>
+              {selectedRows.length < 20 && (
+                <div className="col-md-4">
+                  <ModalGuiaValorizada
+                    selectedRows={selectedRows}
+                    fichaTecnica={fichaTecnica}
+                    obtenerDatosTablaReporte={obtenerDatosTablaReporte}
+                    btnVerTabla={btnVerTabla}
+                  />
+                </div>
+              )}
+              {selectedRows.length >= 20 && (
+                <div class="alert alert-danger" role="alert">
+                  No puede seleccionar mas de 20 filas
+                </div>
+              )}
+            </div>
             <Box
               sx={{
                 height: "650px",
@@ -354,8 +351,6 @@ let id = ficha.idFichatecnica
                     const selectedRows = rows.filter((row) =>
                       selectedIDs.has(row.id)
                     );
-                    //   console.log("haber selectedRows2", selectedRows);
-
                     setSelectedRows(selectedRows);
                     filaSeleccionada(selectedRows);
                   }}
@@ -377,4 +372,4 @@ let id = ficha.idFichatecnica
   );
 }
 
-export default Guias;
+export default GuiaValorizacion;
