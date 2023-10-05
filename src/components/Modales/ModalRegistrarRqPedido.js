@@ -284,7 +284,7 @@ function ModalRegistrarRqPedido({ selectedRows, fichaTecnica,obtenerDatosTablaRe
     ); */
     //console.log("ver idDetallePedido =>", cellValues.row.idDetallePedido);
     if (
-      Number(cellValues.row.cantidadRequerida) > 0 &&
+      Number(cellValues.row.cantidadRequerida) >= 0 &&
       Number(cellValues.row.cantidadRequerida) <=
         Number(cellValues.row.cantidadPedido)
     ) {

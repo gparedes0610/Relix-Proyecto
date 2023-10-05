@@ -135,8 +135,8 @@ function Guias() {
     {
       field: "DESCRIPCION",
       headerName: "Descripcion",
-      width: 150,
-      //editable: true,
+      width: 450,
+      editable: true,
     },
     {
       field: "ESTADOPROD",

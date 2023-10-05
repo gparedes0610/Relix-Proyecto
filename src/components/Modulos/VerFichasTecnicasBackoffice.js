@@ -1060,10 +1060,6 @@ function VerFichasTecnicasBackoffice() {
 
   const filaSeleccionada = (filas) => {
     console.log("funciona", filas);
-    /* if(fila.length>0){
-      console.log('funciona',fila)
-      const existeAnuladoO999 = 0;
-    } */
     const verificar = filas.some((fila) => {
       return (
         fila.nombreEstado == "ANULADO" ||

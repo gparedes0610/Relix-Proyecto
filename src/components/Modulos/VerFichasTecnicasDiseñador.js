@@ -63,15 +63,16 @@ function VerFichasTecnicasDiseñador() {
     promise.then((itemsFinales) => {
       //setItems(d);
       const items = itemsFinales;
-      console.log("haber itemsFinales", items);
+     /*  console.log("haber itemsFinales", items); */
       ref.current.value = "";
       const itemsFinalesConId = items.map((item) => ({
         ...item,
         idFichatecnica: fichaTecnica.idFichatecnica,
       }));
-      console.log("ver agregarId", itemsFinalesConId);
-      setCargaDelExcel(itemsFinalesConId);
-      registrarDetalleFichaDisenador(itemsFinalesConId); // ESTO ES LO Q SE ENVIA PRIMERO AL BACKEND Y SE REGRESA EN tablaDatos
+    /*   console.log("ver agregarId", itemsFinalesConId); */
+      const ArraySinEspacios = itemsFinalesConId.map((item)=>{return {...item,DESCRIPCIÓN:item.DESCRIPCIÓN.trim()}})
+      setCargaDelExcel(ArraySinEspacios);
+      registrarDetalleFichaDisenador(ArraySinEspacios);// ESTO ES LO Q SE ENVIA PRIMERO AL BACKEND Y SE REGRESA EN tablaDatos
       /* setInterval(() => {
         obtenerDetalleFichaTecnicaDisenador(fichaTecnica.idFichatecnica);
       }, 2500); */

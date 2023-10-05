@@ -7,34 +7,30 @@ import clienteAxios from "../../config/axios";
 import Modal from "react-bootstrap/Modal";
 import authContext from "../../context/autenticacion/authContext";
 import Swal from "sweetalert2";
-import {
-  registrarRqPedido,
-  descargarExcelAlRegistrar,
-  descargarExcelGuiaValorizada
-} from "../services/apisBackOffice";
-import { saveAs } from 'file-saver';
-import XLSX from 'xlsx';
-
 import "./style.css";
 
-function ModalGuiaValorizada({ selectedRows, fichaTecnica,obtenerDatosTablaReporte,btnVerTabla }) {
+function ModalGuiaValorizada({
+  selectedRows,
+  fichaTecnica,
+  obtenerDatosTablaReporte,
+  btnVerTabla,
+}) {
   const autentificaciones = useContext(authContext);
   const { usuario } = autentificaciones;
   // console.log("ver usuario", usuario);
   // console.log("ver fichaTecnica", fichaTecnica);
   const [show, setShow] = useState(false);
   const [errores, setErrores] = useState([]);
-// const arrayGlobal =[]
-const copiaFilas = selectedRows;
+  // const arrayGlobal =[]
+  const copiaFilas = selectedRows;
   const [copiaDeFilas, setCopiaDeFila] = useState([]);
   const handleClose = () => {
-    setShow(false)
-    setErrores([])
-    setCopiaDeFila([])
+    setShow(false);
+    setErrores([]);
+    setCopiaDeFila([]);
   };
+  const [verificarEnter, setVerificarEnter] = useState(false)
   const handleShow = () => setShow(true);
-
-
 
   const [registroRQ, setRegistroRQ] = useState({
     codigoAlmacen: "",
@@ -42,7 +38,7 @@ const copiaFilas = selectedRows;
   });
 
   const mostrarTabla = () => {
-   // console.log('copiaFilas',copiaFilas);
+    console.log("copiaFilas", copiaFilas);
     setCopiaDeFila(copiaFilas); //asignar la copia
   };
 
@@ -71,9 +67,12 @@ const copiaFilas = selectedRows;
       var config = {
         responseType: "arraybuffer",
       };
-   const  resultado  = await clienteAxios.post('api/GuiaTrasladoDetalle/requerimiento', data,config);
-      console.log('resultado.data ==>',resultado.data);
-  
+      const resultado = await clienteAxios.post(
+        "api/GuiaTrasladoDetalle/requerimiento",
+        data,
+        config
+      );
+      console.log("resultado.data ==>", resultado.data);
 
       const url = URL.createObjectURL(
         new Blob([resultado.data], {
@@ -90,30 +89,29 @@ const copiaFilas = selectedRows;
       document.body.appendChild(link);
       link.click();
       Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Registro exitoso',
+        position: "top-end",
+        icon: "success",
+        title: "Registro exitoso",
         showConfirmButton: false,
-        timer: 1500
-      })
-     await  btnVerTabla(fichaTecnica)
-     handleClose()
-     
+        timer: 1500,
+      });
+      await btnVerTabla(fichaTecnica);
+      handleClose();
     } catch (error) {
-   console.log('ver error =>',error);
-     /*  setErrores(error.response.data.messages)*/
+      console.log("ver error =>", error);
+      /*  setErrores(error.response.data.messages)*/
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: `error`,
-      }); 
+      });
     }
   };
 
   //Tabla con material UI
   const columns = [
     { field: "id", headerName: "ID", width: 90, hide: true },
-     {
+    {
       field: "NUMERO_ITEM_GUIA_TRASLADO_DETALLE",
       headerName: "Nro Item",
       width: 100,
@@ -157,12 +155,12 @@ const copiaFilas = selectedRows;
       //editable: true,
     },
     {
-      field: "DESCRIPCION_GUIA_TRASLADO_DETALLE",  
+      field: "DESCRIPCION_GUIA_TRASLADO_DETALLE",
       headerName: "Descripcion",
       width: 150,
       //editable: true,
     },
-   {
+    {
       field: "CANTIDAD_GUIA_TRASLADO_DETALLE",
       headerName: "Cantidad",
       width: 150,
@@ -235,27 +233,38 @@ const copiaFilas = selectedRows;
   ];
 
   const btnAgregarCantidad = (cellValues) => {
-    console.log(
-      "ver cantidadRequerida =>",
-      Number(cellValues.row.cantidad)
-    );
-    console.log(
-      "ver descuentodRequerido =>",
-      Number(cellValues.row.descuento)
-    );
+    console.log("ver cantidadRequerida =>", Number(cellValues.row.cantidad));
+    console.log("ver descuentodRequerido =>", Number(cellValues.row.descuento));
+    const cantidadRequerida = Number(cellValues.row.cantidad);
+    const descuentoRequerido = Number(cellValues.row.descuento);
+    /* if (isNaN(cantidadRequerida) && isNaN(descuentoRequerido)) {
+      Swal.fire({
+        icon: "info",
+        title: "Oops...",
+        text: "Por favor, llene al menos 1 campo",
+      });
+      setVerificarEnter(true)
+      return;
+    } */
     if (
-      Number(cellValues.row.cantidad) > 0 &&
       Number(cellValues.row.cantidad) <=
-        Number(cellValues.row.CANTIDAD_GUIA_TRASLADO_DETALLE)
-        && Number(cellValues.row.descuento) >= 0
+      Number(cellValues.row.CANTIDAD_GUIA_TRASLADO_DETALLE) || isNaN(cantidadRequerida)
     ) {
+      setVerificarEnter(false)
       setCopiaDeFila(
         copiaDeFilas.map((item) => {
-          if (item.ID_GUIA_TRASLADO_DETALLE == cellValues.row.ID_GUIA_TRASLADO_DETALLE) {
-            item.cantidad = cellValues.row.cantidad;
-            item.descuento = cellValues.row.descuento;
+          if (
+            item.ID_GUIA_TRASLADO_DETALLE ==
+            cellValues.row.ID_GUIA_TRASLADO_DETALLE
+          ) {
+            item.cantidad = cellValues.row.cantidad == undefined ? "0" : cellValues.row.cantidad;
+            item.descuento =
+              cellValues.row.descuento == undefined
+                ? "0"
+                : cellValues.row.descuento;
             item.guiatrasladodetalle = cellValues.row.ID_GUIA_TRASLADO_DETALLE;
           }
+          console.log("item ->", item);
           return item;
         })
       );
@@ -266,28 +275,18 @@ const copiaFilas = selectedRows;
         showConfirmButton: false,
         timer: 2000,
       });
-    /*   const arrayGlobal= copiaFilas2.map((item) => {
-        if (item.ID_GUIA_TRASLADO_DETALLE
-          == cellValues.row.ID_GUIA_TRASLADO_DETALLE
-          ) {
-          item.cantidad = cellValues.row.cantidadRequerida;
-          item.descuento = cellValues.row.descuentodRequerido;
-        }
-        return item;
-      })
-      setArrayTraslado(arrayGlobal) */
+
       return;
     } else {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: `Cantidad requerida tiene que ser mayor que 0 y menor que Cantidad`,
+        text: `Cantidad requerida no puede ser mayor de la cantidad que ya se tiene`,
       });
       cellValues.row.cantidadRequerida = 0;
-      cellValues.row.descuentodRequerido=0;
+      cellValues.row.descuentodRequerido = 0;
       return;
     }
-    
   };
 
   const rows = copiaDeFilas.map((dato, i) => ({
@@ -297,7 +296,8 @@ const copiaFilas = selectedRows;
 
   return (
     <>
-      <button className="btn btn-warning btn-sm mb-3 text-uppercase"
+      <button
+        className="btn btn-warning btn-sm mb-3 text-uppercase"
         onClick={() => handleShow()}
       >
         Registrar guia valorizada
@@ -332,6 +332,10 @@ const copiaFilas = selectedRows;
               <Container>
                 {copiaDeFilas.length > 0 && (
                   <Row>
+                    {verificarEnter && <div class="alert alert-warning" role="alert">
+                      Por favor al terminar de escribir presionar enter
+                    </div>}
+                    
                     <Col md={12}>
                       <Box
                         sx={{
@@ -391,22 +395,21 @@ const copiaFilas = selectedRows;
                 </Form.Group>
               </div>
 
-
               {copiaDeFilas.length > 0 && (
                 <Button variant="primary mt-3 float-end " type="submit">
                   Agregar
                 </Button>
               )}
             </Form>
-            {
-              errores.length>0 &&
-              errores.map((error,i)=>(
+            {errores.length > 0 &&
+              errores.map((error, i) => (
                 <div className="mt-1">
-              <p className="text-uppercase text-danger bg-secondary text-white p-2"> {error}</p>
-              </div>
-
-              ))
-            }
+                  <p className="text-uppercase text-danger bg-secondary text-white p-2">
+                    {" "}
+                    {error}
+                  </p>
+                </div>
+              ))}
           </div>
         </Modal.Body>
       </Modal>
@@ -415,4 +418,3 @@ const copiaFilas = selectedRows;
 }
 
 export default ModalGuiaValorizada;
-

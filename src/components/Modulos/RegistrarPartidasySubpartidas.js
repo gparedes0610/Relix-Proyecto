@@ -109,7 +109,7 @@ function RegistrarPartidasySubpartidas() {
 
       {errores.length > 0 && (
         <div className="row mt-4">
-          <h4 className="text-danger text-uppercase">Errores :</h4>
+          <h4 className="text-danger text-uppercase">Informacion de subida :</h4>
 
           {errores.map((error, i) => (
             <p className="text-uppercase" key={i}>

@@ -126,8 +126,8 @@ function GuiaValorizacion() {
     {
       field: "DESCRIPCION_GUIA_TRASLADO_DETALLE",
       headerName: "Descripcion",
-      width: 150,
-      //editable: true,
+      width: 450,
+      editable: true,
     },
     {
       field: "CANTIDAD_GUIA_TRASLADO_DETALLE",
