@@ -1,6 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import authContext from "../../context/autenticacion/authContext";
+import React from "react";
+import { Navigate } from "react-router-dom";
 import LayoutPrincipal from "../Layout/LayoutPrincipal";
 
 function PrivateRoute(props) {

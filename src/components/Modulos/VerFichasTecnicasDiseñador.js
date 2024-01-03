@@ -7,7 +7,6 @@ import FichaTecnica from "./FichaTecnica";
 import * as XLSX from "xlsx";
 import { useRef } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Spinner } from "react-bootstrap";
 import { AiOutlineSave } from "react-icons/ai";
 function VerFichasTecnicasDiseñador() {
   const [fichasTecnicas, setFichasTecnicas] = useState([]);
@@ -71,7 +70,10 @@ function VerFichasTecnicasDiseñador() {
       }));
     /*   console.log("ver agregarId", itemsFinalesConId); */
       const ArraySinEspacios = itemsFinalesConId.map((item)=>{return {...item,DESCRIPCIÓN:item.DESCRIPCIÓN.trim()}})
+      //const ArraySinEspaciosSinSlash = ArraySinEspacios.map((item)=>{return item.DESCRIPCIÓN.replaceAll("", "XDD") })
       setCargaDelExcel(ArraySinEspacios);
+     // console.log('Esto ENVIO AL BACKEND',ArraySinEspacios);
+      //console.log('Esto ENVIO AL BACKEND SIN SLASH',ArraySinEspaciosSinSlash);
       registrarDetalleFichaDisenador(ArraySinEspacios);// ESTO ES LO Q SE ENVIA PRIMERO AL BACKEND Y SE REGRESA EN tablaDatos
       /* setInterval(() => {
         obtenerDetalleFichaTecnicaDisenador(fichaTecnica.idFichatecnica);

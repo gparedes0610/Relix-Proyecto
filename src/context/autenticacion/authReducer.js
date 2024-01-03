@@ -49,7 +49,7 @@ export default (state, action) => {
     case OBTENER_USUARIO:
       return {
         ...state,
-        usuario: action.payload.user,
+        usuario: action.payload.sub,
         autenticado: true,
         cargando: false,
       };

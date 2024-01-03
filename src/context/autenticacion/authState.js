@@ -6,18 +6,14 @@ import {
   LOGIN_EXITOSO,
   LOGIN_ERROR,
   CERRAR_SESION,
-  /*REGISTRO_EXITOSO,
-  REGISTRO_ERROR,
-  OBTENER_TODOS_LOS_USUARIOS,
-  ACTUALIZAR_USUARIO,*/
   ACTUALIZAR_PASSWORD,
   ENVIAR_PASSWORD,
 } from "../../types";
 import { useReducer } from "react";
 import clienteAxios from "../../config/axios"; //obtengo la bd urlS
 import tokenAuth from "../../config/token";
-
 const AuthStateProvider = (props) => {
+
   const initialState = {
     token: localStorage.getItem("token"),
     autenticado: null,
@@ -32,6 +28,7 @@ const AuthStateProvider = (props) => {
 
   //retorna el usuario autenticado
   const usuarioAutenticado = async () => {
+    //console.log('ENTRASTE A usuarioAutenticado');
     const token = localStorage.getItem("token");
     if (token) {
       //todo:funcion para enviar el token por headers
@@ -40,8 +37,9 @@ const AuthStateProvider = (props) => {
     }
 
     try {
+     // console.log('ENTRASTE AL TRY DE usuarioAutenticado ');
       const respuesta = await clienteAxios.get("/auth/login");
-      /* console.log("esta es la respuesta en usuarioAutenticado", respuesta); */
+     // console.log("esta es la respuesta en usuarioAutenticado  -->", respuesta.data);
       dispatch({
         type: OBTENER_USUARIO,
         payload: respuesta.data,
@@ -62,12 +60,13 @@ const AuthStateProvider = (props) => {
     try {
       console.log("entraste al try de iniciarSesion");
       const respuesta = await clienteAxios.post("/auth/login", datos); //envio correo y clave
-      console.log("respuesta de iniciarSesion ", respuesta);
+   //   console.log("respuesta de iniciarSesion ", respuesta);
       ////
       dispatch({
         type: LOGIN_EXITOSO,
         payload: respuesta.data,
       });
+      
     } catch (error) {
       console.log("HUBO UN ERROR PES ", error);
       console.log("HUBO UN ERROR PES ", error.response.data.messages.error);

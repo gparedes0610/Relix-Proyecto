@@ -1,28 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import login from "../../img/login4.svg";
 import LogoRelix from "../../img/relixjpgg.png";
 import { Form, Button } from "react-bootstrap";
 import authContext from "../../context/autenticacion/authContext";
 import alertContext from "../../context/alertas/alertaContext";
-import Swal from "sweetalert2";
-import clienteAxios from "../../config/axios";
 
 function Login() {
+  const navigate = useNavigate();
   const alertascontext = useContext(alertContext);
   const { alerta } = alertascontext;
   /////////////////////////////////
   const autentificaciones = useContext(authContext);
-  const { mensaje, autenticado, iniciarSesion } = autentificaciones;
-  let navigate = useNavigate();
-  /////////////////////////////////
-
+  const { autenticado, iniciarSesion } = autentificaciones;
   useEffect(() => {
-    if (autenticado) {
-      navigate(`/sesioniniciada`);
-      return;
-    }
-  }, [autenticado]);
+    
+    localStorage.clear()
+  }, [])
+  
+
   /////////////////////////////////////////////////
 
   /////////////////////////////////
@@ -40,13 +36,20 @@ function Login() {
     //error
     if (correo.trim() === "" || clave.trim() === "") {
       alert("Todos los campos son obligatorios");
-
       console.log("error");
       return;
     }
     //console.log(sesion);
-    iniciarSesion({ correo, clave });
+    /* navigate('/sesioniniciada'); */
+     await iniciarSesion({ correo, clave });
+     await ingresoExitoso()
+
   };
+
+  const ingresoExitoso = async()=>{
+    console.log('---LOGIN EXITOSO----');
+    navigate('/sesioniniciada')
+  }
 
   return (
     <>

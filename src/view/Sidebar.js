@@ -7,8 +7,15 @@ import authContext from "../context/autenticacion/authContext";
 function Sidebar() {
   const autentificaciones = useContext(authContext);
   const { usuario, usuarioAutenticado } = autentificaciones
+
+ // console.log('usuario en sideBard ==>',usuario)
+  //console.log('usuarioAutenticado en sideBard ==>',usuarioAutenticado)
+ 
+ 
   useEffect(() => {
-    usuarioAutenticado();
+    setTimeout(() => {
+      usuarioAutenticado();
+    }, 2000);
   }, []);
     const [activarSideBar, setActivarSideBar] = useState(false)
     const btnMenu =()=>{

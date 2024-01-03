@@ -33,7 +33,7 @@ import ReporteFichaProyecto from "./components/Modulos/ReporteFichaProyecto";
 import Guias from "./components/Modulos/Guias";
 import ModuloDescargaDeArchivos from "./components/Modulos/ModuloDescargaDeArchivos";
 import VerDescargaDeArchivos from "./components/Modulos/VerDescargaDeArchivos";
-//MODULOS fin
+// fin MODULOS 
 import OlvidastePassword from "./components/auth/OlvidastePassword";
 import RecuperarPassword from "./components/auth/RecuperarPassword";
 import RegistrarGuiasVsPedido from "./components/Modulos/RegistrarGuiasVsPedido";

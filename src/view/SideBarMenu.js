@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import React, { useContext} from "react";
+import { Link, useNavigate } from "react-router-dom";
 import authContext from "../context/autenticacion/authContext";
 import Logo from "../img/relixsinfondo.png";
 import Swal from "sweetalert2";

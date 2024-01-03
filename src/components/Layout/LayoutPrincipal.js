@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../../view/Navbar";
 import Sidebar from "../../view/Sidebar";
 
 function LayoutPrincipal(props) {
