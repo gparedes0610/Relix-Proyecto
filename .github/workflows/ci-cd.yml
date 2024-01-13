@@ -13,6 +13,14 @@ jobs:
         run: echo "Create new tag job initialized"
       - name: Add remote repository
         run: |
+          git remote add github_runner_origin "https://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@github.com/$GITHUB_REPOSITORY.git"
+          git remote -v
+          git checkout ci-cd
+          git pull gitlab_runner_origin ci-cd
+          chmod +x ./scripts/create_tag.sh
+          if [ "$GITHUB_REF" == "refs/heads/ci-cd" ] && [ -z "$(git tag --contains $GITHUB_SHA)" ]; then ./scripts/create_tag.sh; fi
+          git remote remove gitlab_runner_origin
+          echo "Create new tag job finished!"
           echo "Evento que desencadenó el flujo de trabajo: $GITHUB_EVENT_NAME"
           echo "SHA de la confirmación: $GITHUB_SHA"
           echo "Rama de referencia: $GITHUB_REF" 
