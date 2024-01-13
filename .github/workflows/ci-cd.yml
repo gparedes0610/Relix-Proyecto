@@ -12,6 +12,6 @@ jobs:
       - name: Initialized new tag job
         run: echo "Create new tag job initialized"
       - name: Add remote repository
-        run: echo "$GITHUB_ACTION_PATH"
+        run: echo "$GITHUB_REPOSITORY"
       - name: Finished new tag job
         run: echo "Create new tag job finished!"
