@@ -1,0 +1,15 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - ci-cd
+
+jobs:
+  create-new-tag-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Initialized new tag job
+        run: echo "Create new tag job initialized"
+      - name: Finished new tag job
+        run: echo "Create new tag job finished!"
