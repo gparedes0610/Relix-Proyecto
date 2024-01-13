@@ -13,7 +13,7 @@ jobs:
         run: echo "Create new tag job initialized"
       - name: Add remote repository
         run: |
-          git remote add github_runner_origin "https://github.com/gparedes0610/Relix-Proyecto.git"
+          git remote add github_runner_origin "https://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@github.com/gparedes0610/Relix-Proyecto.git"
           git remote -v
           git checkout ci-cd
           git pull gitlab_runner_origin ci-cd
