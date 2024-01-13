@@ -12,6 +12,10 @@ jobs:
       - name: Initialized new tag job
         run: echo "Create new tag job initialized"
       - name: Add remote repository
-        run: echo "$GITHUB_REPOSITORY"
+        run: |
+          echo "Evento que desencadenó el flujo de trabajo: $GITHUB_EVENT_NAME"
+          echo "SHA de la confirmación: $GITHUB_SHA"
+          echo "Rama de referencia: $GITHUB_REF" 
+          echo "Nombre del repositorio: $GITHUB_REPOSITORY"
       - name: Finished new tag job
         run: echo "Create new tag job finished!"
