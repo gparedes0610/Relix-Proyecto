@@ -11,9 +11,20 @@ jobs:
     steps:
       - name: Initialized new tag job
         run: echo "Create new tag job initialized"
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ci-cd # Especifica la rama que deseas verificar
+
+      - name: Set up Git
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+
       - name: Add remote repository
         run: |
-          git remote add github_runner_origin "https://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@github.com/gparedes0610/Relix-Proyecto.git"
           git remote -v
           git checkout ci-cd
           git pull gitlab_runner_origin ci-cd
