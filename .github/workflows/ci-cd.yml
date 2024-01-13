@@ -19,21 +19,22 @@ jobs:
 
       - name: Set up Git
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
 
       - name: Add remote repository
         run: |
-          git remote -v
-          git checkout ci-cd
-          git pull gitlab_runner_origin ci-cd
-          chmod +x ./scripts/create_tag.sh
-          if [ "$GITHUB_REF" == "refs/heads/ci-cd" ] && [ -z "$(git tag --contains $GITHUB_SHA)" ]; then ./scripts/create_tag.sh; fi
           echo "Create new tag job finished!"
-          echo "Evento que desencadenó el flujo de trabajo: $GITHUB_EVENT_NAME"
+          echo "Un token de acceso: $GITHUB_TOKEN"
+          echo "El nombre del repositorio: $GITHUB_REPOSITORY"
+          echo "El nombre del usuario o el nombre de la acción de GitHub: $GITHUB_ACTOR"
+          echo "El nombre del evento que desencadenó el flujo de trabajo: $GITHUB_EVENT_NAME"
+          echo "La ruta al archivo JSON que contiene los detalles del evento que desencadenó el flujo de trabajo: $GITHUB_EVENT_PATH"
+          echo "El nombre del flujo de trabajo: $GITHUB_WORKFLOW"
+          echo "El nombre de la acción que se está ejecutando actualmente: $GITHUB_ACTION"
           echo "SHA de la confirmación: $GITHUB_SHA"
           echo "Rama de referencia: $GITHUB_REF" 
-          echo "Nombre del repositorio: $GITHUB_REPOSITORY"
+        
       - name: Finished new tag job
         run: echo "Create new tag job finished!"
