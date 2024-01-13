@@ -35,6 +35,7 @@ jobs:
           echo "El nombre de la acción que se está ejecutando actualmente: $GITHUB_ACTION"
           echo "SHA de la confirmación: $GITHUB_SHA"
           echo "Rama de referencia: $GITHUB_REF" 
+          echo "El nombre del trabajo actual: $GITHUB_JOB_NAME"
         
       - name: Finished new tag job
         run: echo "Create new tag job finished!"
