@@ -22,6 +22,14 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
+      - name: Process commands to create new tag
+        run: |
+          git remote -v
+          git checkout ci-cd
+          git pull origin ci-cd
+          chmod +x ./scripts/create_tag.sh
+          if [ "$GITHUB_REF" == "refs/heads/ci-cd" ] && [ -z "$(git tag --contains $GITHUB_SHA)" ]; then ./scripts/create_tag.sh; fi
+
       - name: Exposed variables github
         run: |
           echo "Create new tag job finished!"

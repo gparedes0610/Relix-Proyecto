@@ -32,11 +32,11 @@ echo "$PATCH."
 # Incrementa el número de versión adecuadamente según el tipo de cambio realizado en el código
 # Por ejemplo, si el último tag fue "1.2.3", el próximo tag será "1.2.4" para un cambio de parche
 # Si se realiza un cambio menor, el tag sería "1.3.0", y para un cambio mayor sería "2.0.0"
-if [[ "$CI_COMMIT_MESSAGE" == "major"* || "$CI_COMMIT_MESSAGE" == *")!"* ]]; then
+if [[ "$(jq -r '.commits[0].message' $GITHUB_EVENT_PATH)" == "major"* || "$(jq -r '.commits[0].message' $GITHUB_EVENT_PATH)" == *")!"* ]]; then
   ((MAJOR++))
   MINOR=0
   PATCH=0
-elif [[ "$CI_COMMIT_MESSAGE" == "feature"* || "$CI_COMMIT_MESSAGE" == "feat"* ]]; then
+elif [[ "$(jq -r '.commits[0].message' $GITHUB_EVENT_PATH)" == "feature"* || "$(jq -r '.commits[0].message' $GITHUB_EVENT_PATH)" == "feat"* ]]; then
   ((MINOR++))
   PATCH=0
 else
@@ -54,7 +54,7 @@ git tag $TAG_NAME
 echo "Tag $TAG_NAME creado localmente"
 
 # Sube el tag al repositorio remoto
-git push gitlab_runner_origin $TAG_NAME -o ci.skip
+git push origin $TAG_NAME -o ci.skip
 
 echo "Tag $TAG_NAME creado remotamente"
 
