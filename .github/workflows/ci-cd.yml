@@ -22,8 +22,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-
-      - name: Add remote repository
+      - name: Exposed variables github
         run: |
           echo "Create new tag job finished!"
           echo "Un token de acceso: $GITHUB_TOKEN"
@@ -36,6 +35,7 @@ jobs:
           echo "SHA de la confirmación: $GITHUB_SHA"
           echo "Rama de referencia: $GITHUB_REF" 
           echo "El nombre del trabajo actual: $GITHUB_JOB"
+          echo "El nombre del trabajo actual: $(jq -r '.commits[0].message' $GITHUB_EVENT_PATH)"
         
       - name: Finished new tag job
         run: echo "Create new tag job finished!"
