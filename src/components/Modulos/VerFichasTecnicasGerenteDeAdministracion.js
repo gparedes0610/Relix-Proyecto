@@ -31,7 +31,7 @@ function VerFichasTecnicasGerenteDeAdministracion() {
   const obtenerFichasAceptadasGa = async () => {
     try {
       setCargando(true)
-      const { data } = await clienteAxios.get("/api/FichaTecnicaCotizadas");
+      const { data } = await clienteAxios.get("/api/fichas-tecnicas-gerencias-administraciones");
       console.log("obtenerFichasAceptadas", data);
       setFichasTecnicasGerenteAdministracion(data);
       setCargando(false)
@@ -345,10 +345,7 @@ function VerFichasTecnicasGerenteDeAdministracion() {
   const DenegarAltaNegocioGerenteAdministracion = async (idFicha, numero) => {
     console.log("esta es la data en altaNegocio ", idFicha, numero);
     try {
-      const resultado = await clienteAxios.put(
-        `/api/AprobacionGerenteAdministracion/${idFicha}`,
-        numero
-      );
+      
       const accionUsuario = await Swal.fire({
         icon: "warning",
         title: "Esta apunto de denegar alta de negocio",
@@ -357,6 +354,10 @@ function VerFichasTecnicasGerenteDeAdministracion() {
       });
 
       if (accionUsuario.isConfirmed) {
+        const resultado = await clienteAxios.put(
+          `/api/AprobacionGerenteAdministracion/${idFicha}`,
+          numero
+        );
         console.log("resultado de altaNegocio", resultado);
         console.log("resultado de altaNegocio", resultado.data);
         await obtenerFichasAceptadasGa();

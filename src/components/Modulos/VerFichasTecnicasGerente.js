@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Card from "react-bootstrap/Card";
-import { Accordion, Button, Form, Spinner, Tab, Tabs } from "react-bootstrap";
+import { Accordion, Button, Form } from "react-bootstrap";
 import Cargando from "../../view/Cargando";
 import clienteAxios from "../../config/axios";
 import { useEffect } from "react";
@@ -32,7 +32,7 @@ function VerFichasTecnicasGerente() {
   /////////////////////////////////////////////////////////////////////////CONSUMO DE APIS
   const obtenerFichasAceptadas = async () => {
     try {
-      const { data } = await clienteAxios.get("/api/FichaTecnicaCotizadas");
+      const { data } = await clienteAxios.get("/api/fichas-tecnicas-gerencias-generales");
       console.log("obtenerFichasAceptadas", data);
       setFichasTecnicasGerente(data);
 
@@ -655,10 +655,7 @@ function VerFichasTecnicasGerente() {
   const denegarAlta = async (idFicha, numero) => {
     console.log("esta es la data en altaNegocio ", idFicha, numero);
     try {
-      const resultado = await clienteAxios.put(
-        `/api/AprobacionGerenteGeneral/${idFicha}`,
-        numero
-      );
+     
       const accionUsuario = await Swal.fire({
         icon: "warning",
         title: "Esta apunto de denegar alta de negocio",
@@ -667,6 +664,10 @@ function VerFichasTecnicasGerente() {
       });
 
       if (accionUsuario.isConfirmed) {
+        const resultado = await clienteAxios.put(
+          `/api/AprobacionGerenteGeneral/${idFicha}`,
+          numero
+        );
         console.log("resultado de altaNegocio", resultado);
         console.log("resultado de altaNegocio", resultado.data);
         await obtenerFichasAceptadas();

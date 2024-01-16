@@ -38,6 +38,7 @@ import OlvidastePassword from "./components/auth/OlvidastePassword";
 import RecuperarPassword from "./components/auth/RecuperarPassword";
 import RegistrarGuiasVsPedido from "./components/Modulos/RegistrarGuiasVsPedido";
 import GuiaValorizacion from "./components/Modulos/Modulo-Guias/GuiaValorizacion";
+import VerFichasTecnicasGerenteProyecto from "./components/Modulos/VerFichasTecnicasGerenteProyecto";
 
 
 
@@ -260,6 +261,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <ModuloDescargaDeArchivos />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/fichas-tecnicas-gerente-proyecto"
+                element={
+                  <PrivateRoute>
+                    <VerFichasTecnicasGerenteProyecto />
                   </PrivateRoute>
                 }
               />

@@ -27,7 +27,7 @@ import ModalDatosDePartidaIng from "../Modales/ModalDatosDePartidaIng";
 import ModalDatosDeSubPartidaIng from "../Modales/ModalDatosDeSubPartidaIng";
 import ModalAgregarProductoIngeniero from "../Modales/ModalAgregarProductoIngeniero";
 
-function VerFichasTecnicasIngeniero() {
+function VerFichasTecnicasGerenteProyecto() {
   /////////////////////////////////
   const autentificaciones = useContext(authContext);
   const { usuario } = autentificaciones;
@@ -46,6 +46,7 @@ function VerFichasTecnicasIngeniero() {
   const [fichaTecnica, setFichaTecnica] = useState({});
   const { envio_ingeniero_fichatecnica } = fichaTecnica;
   const [fichasTecnicasIngeniero, setFichasTecnicasIngeniero] = useState([]);
+  const [idUsuarioFichaTecnica, setidUsuarioFichaTecnica] = useState("");
   ////MOSTRAR FICHA
   const [mostarFicha, setMostarFicha] = useState(false);
 
@@ -90,6 +91,8 @@ function VerFichasTecnicasIngeniero() {
 
   const btnVerTabla = (ficha, indice) => {
     console.log("haber la ficha", ficha, "id", ficha.idFichatecnica);
+    console.log("usuario de ficha tecnica ->", ficha.idUsuario);
+    setidUsuarioFichaTecnica(ficha.idUsuario);
     setFichaTecnica(ficha);
     obtenerDetalleTecnicasIngeniero(ficha.idFichatecnica);
     obtenerModulos(ficha.idFichatecnica);
@@ -211,7 +214,7 @@ function VerFichasTecnicasIngeniero() {
       maxWidth: 550,
       editable: true,
       /*  align: "right",
-      headerAlign: "right", */
+          headerAlign: "right", */
     },
 
     {
@@ -332,7 +335,7 @@ function VerFichasTecnicasIngeniero() {
       renderCell: (cellValues) => {
         return (
           <div>
-            {fichaTecnica.envio_ingeniero_fichatecnica == "0" ? (
+            {fichaTecnica.cotizacionenviadaFichatecnica == "0" ? (
               <>
                 <button
                   className="btn-warning btn-sm rounded"
@@ -862,23 +865,6 @@ function VerFichasTecnicasIngeniero() {
     });
   };
 
-  const aprobarCotizacion = () => {
-    Swal.fire({
-      title: "Solicitar a gerencia general:",
-      html: `<input type="text" id="mensaje" className="swal2-input" placeholder="Mensaje">
-    `,
-      confirmButtonText: "Enviar mensaje",
-      focusConfirm: false,
-      preConfirm: () => {
-        const mensaje = Swal.getPopup().querySelector("#mensaje").value;
-
-        return GuardarAprobarCotizacion(mensaje, fichaTecnica.idFichatecnica);
-      },
-    }).then((result) => {
-      console.log(result);
-    });
-  };
-
   const guardarCotizacion = async (mensaje, idFichaTecnica) => {
     console.log("hola??");
     //mensaje
@@ -920,6 +906,23 @@ function VerFichasTecnicasIngeniero() {
     }
   };
 
+  const aprobarCotizacion = () => {
+    Swal.fire({
+      title: "Solicitar a gerencia general:",
+      html: `<input type="text" id="mensaje" className="swal2-input" placeholder="Mensaje">
+    `,
+      confirmButtonText: "Enviar mensaje",
+      focusConfirm: false,
+      preConfirm: () => {
+        const mensaje = Swal.getPopup().querySelector("#mensaje").value;
+
+        return GuardarAprobarCotizacion(mensaje, fichaTecnica.idFichatecnica);
+      },
+    }).then((result) => {
+      console.log(result);
+    });
+  };
+
   const GuardarAprobarCotizacion = async (mensaje, idFichaTecnica) => {
     console.log("entras?");
     const datos = {
@@ -947,6 +950,34 @@ function VerFichasTecnicasIngeniero() {
         title: "Oops...",
         html: `<b> ${error.response.data.messages.error}</b>`,
       });
+    }
+  };
+
+  //denegaralta de negocio
+  const denegarAlta = async (idFicha, numero) => {
+    console.log("esta es la data en altaNegocio ", idFicha, numero);
+    try {
+     
+      const accionUsuario = await Swal.fire({
+        icon: "warning",
+        title: "¿Esta seguro que desea desaprobar?",
+        showConfirmButton: true,
+        showCancelButton: true,
+      });
+
+      if (accionUsuario.isConfirmed) {
+        const resultado = await clienteAxios.put(
+          `/api/aprobaciones-gerentes-proyectos/${idFicha}`,
+          numero
+        );
+        console.log("resultado de altaNegocio", resultado);
+        console.log("resultado de altaNegocio", resultado.data);
+        await obtenerFichasTecnicasIngeniero(idUsuario);
+        setMostarFicha(false);
+      }
+    } catch (error) {
+      alert(error.response.data.messages.error)
+      console.log(error.response.data.messages.error);
     }
   };
 
@@ -979,7 +1010,7 @@ function VerFichasTecnicasIngeniero() {
     <div className="container-fluid pt-4 ">
       <div className="my-4 text-center container ">
         <h4 className=" fw-bold border border-secondary rounded p-3 shadow mb-2 bg-body text-uppercase">
-          Ficha Técnica de Proyecto - Ingeniero
+          Ficha Técnica de Proyecto - Gerente de Proyecto
         </h4>
       </div>
       <div className="row">
@@ -1017,7 +1048,7 @@ function VerFichasTecnicasIngeniero() {
                             Ver Lista de Materiales
                           </button>
 
-                          {fichaTecnica.envio_ingeniero_fichatecnica == "0" ? (
+                          {fichaTecnica.cotizacionenviadaFichatecnica == "0" ? (
                             <>
                               <br />
                               <span className="bg-warning text-dark px-2 rounded text-uppercase mt-3">
@@ -1100,7 +1131,7 @@ function VerFichasTecnicasIngeniero() {
                   </span>
                 </div>
                 {/*      AQUI ES TODO LOS DESCUENTOS */}
-                {fichaTecnica.envio_ingeniero_fichatecnica == "0" && (
+                {fichaTecnica.cotizacionenviadaFichatecnica == "0" && (
                   <div>
                     <p className="text-uppercase">Aplique sus descuentos:</p>
                     <p className="text-uppercase text-success">
@@ -1314,33 +1345,39 @@ function VerFichasTecnicasIngeniero() {
                     {/*   FIN DESCUENTO SUBPARTIDA */}
                     <div className="row mb-3">
                       <div className="col-12 col-sm-2 my-1">
-                        {
-                          envio_ingeniero_fichatecnica == "0" && (
-                            <button
-                              className="btn btn-success btn btn-sm text-uppercase"
-                              onClick={() => EnviarguardadoCotizacion()}
-                            >
-                              <BsFillEmojiLaughingFill className="h3 m-0 p-0 pe-1" />
-                              Guardar cotizacion{" "}
-                            </button>
-                          )}
-                        {
-                          envio_ingeniero_fichatecnica == "1" && (
-                            <span className="text-success ">
-                              Enviado al gerente de proyecto
-                            </span>
-                          )}
-                      </div>
-
-                      <div className="col-12 col-sm-2 my-1">
                         <button
-                          className="btn btn-danger btn btn-sm text-uppercase"
-                          onClick={() => eliminarTabla()}
+                          className="btn btn-warning text-uppercase"
+                          onClick={() => aprobarCotizacion()}
                         >
-                          <BsFillEmojiFrownFill className="h3 m-0 p-0 pe-1" />
-                          Limpiar tabla{" "}
+                          aprobar cotizacion
                         </button>
                       </div>
+
+                      {idUsuario == idUsuarioFichaTecnica ? (
+                        <div className="col-12 col-sm-2 my-1">
+                          <button
+                            className="btn btn-danger btn btn-sm text-uppercase"
+                            onClick={() => eliminarTabla()}
+                          >
+                            <BsFillEmojiFrownFill className="h3 m-0 p-0 pe-1" />
+                            Limpiar tabla{" "}
+                          </button>
+                        </div>
+                      )
+                      :(
+<div className="col-12 col-sm-2 my-1">
+                        <button
+                          className="btn btn-danger btn btn-sm text-uppercase"
+                          onClick={() => denegarAlta(fichaTecnica.idFichatecnica, 2)}
+                        >
+                          <BsFillEmojiFrownFill className="h3 m-0 p-0 pe-1" />
+                          Desaprobar{" "}
+                        </button>
+                      </div>
+                      )
+                      }
+
+                      
                       <div className="col-12 col-sm-2 my-1">
                         <button
                           className="btn btn-warning btn btn-sm text-uppercase"
@@ -1363,7 +1400,7 @@ function VerFichasTecnicasIngeniero() {
                     </div>
                   </div>
                 )}
-                {fichaTecnica.envio_ingeniero_fichatecnica == "1" && (
+                {fichaTecnica.cotizacionenviadaFichatecnica == "1" && (
                   <div className="mb-3">
                     <button
                       className="btn btn-warning btn btn-sm text-uppercase"
@@ -1420,9 +1457,9 @@ function VerFichasTecnicasIngeniero() {
                           rowsPerPageOptions={[5]}
                           getCellClassName={(params) => {
                             /*  if (params.field === 'city' || params.value == null) {
-                               return '';
-                             }
-                             return params.value >= 15 ? 'hot' : 'cold'; */
+                             return '';
+                           }
+                           return params.value >= 15 ? 'hot' : 'cold'; */
                             return params.row
                               .idEstadoproductoDetallefichatecnica == "4"
                               ? "hot"
@@ -1490,4 +1527,4 @@ function VerFichasTecnicasIngeniero() {
   );
 }
 
-export default VerFichasTecnicasIngeniero;
+export default VerFichasTecnicasGerenteProyecto;
